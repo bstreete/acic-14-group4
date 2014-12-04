@@ -73,18 +73,18 @@ def init_wq(name, password_file):
 	"""
 
 	# Try to create the queue with a random port and specified name
-	try:
-		wq = WorkQueue(0)
-		wq.specify_name(name)
-		wq.specify_password_file(password_file)
-		wq.specify_mode(WORK_QUEUE_MASTER_MODE_CATALOG)
-		wq.cctools_debug_flags_set('all')
-		print 'Started Work Queue process with project name %s\n' % name
+	# try:
+	wq = WorkQueue(0)
+	wq.specify_name(name)
+	wq.specify_password_file(password_file)
+	wq.specify_mode(WORK_QUEUE_MASTER_MODE_CATALOG)
+	wq.cctools_debug_flags_set('all')
+	print 'Started Work Queue process with project name %s\n' % name
 		
 	# Catch the errors
-	except:
-		print 'Failed to initialize work queue process. Aborting'
-		sys.exit(1)
+	# except:
+		# print 'Failed to initialize work queue process. Aborting'
+		# sys.exit(1)
 
 	return wq
 # End init_wq(name, password_file)
