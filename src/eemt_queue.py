@@ -230,7 +230,7 @@ def start_wq(wq, total):
 	# Check every 5 seconds for completed tasks
 	while not wq.empty(): 
 		t = wq.wait(5)
-
+		print 'Waiting for completion....'
 		if t: 
 			print 'Finished task %d of %d. %2.2f%% completed.' % (t.id, total, float(t.id / total))
 
