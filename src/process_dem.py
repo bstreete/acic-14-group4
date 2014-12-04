@@ -1,6 +1,7 @@
 from glob import glob
 from subprocess import Popen, PIPE
 from math import pow
+from math import floor
 from rpy2.robjects.packages import importr
 import os
 import re
@@ -19,22 +20,51 @@ def getDaymetData(tiffName, ulLat, ulLon, lrLat, lrLon, startYear=2013, endYear=
     if not os.path.exists('daymet'):
         os.makedirs('daymet')
     
+    stLat = 50
+    stLon = -132
+    stTile = 12625
+    
     # Download Daymet data for the dem region
-    daymetR = importr("DaymetR")
-    
-    daymetR.get_Daymet_tiles(ulLat, ulLon, lrLat, lrLon, startYear, endYear, option)
-    
+    #daymetR = importr("DaymetR")
+    #daymetR.get_Daymet_tiles(ulLat, ulLon, lrLat, lrLon, startYear, endYear, option)
+    # For test only
+    # lrLat -= 2
+    # lrLon += 2 
     daymetCoords = dict()
+    ulLat = stLat + floor((ulLat - stLat) / 2) * 2
+    ulLon = stLon + floor((ulLon - stLon) / 2) * 2
+    
+    lrLat = stLat + floor((lrLat - stLat) / 2) * 2
+    lrLon = stLon + floor((lrLon - stLon) / 2) * 2
+    
+    ulTile = int(stTile + ((ulLat - stLat) / 2) * 180 + (ulLon - stLon) / 2)
+    lrTile = int(stTile + ((lrLat - stLat) / 2) * 180 + (lrLon - stLon) / 2)
+    
+    baseURL = 'http://thredds.daac.ornl.gov/thredds/fileServer/ornldaac/1219/tiles/'
+    outPath = './daymet/%d_%d' % (ulTile, lrTile)
+    
+    if not os.path.exists(outPath):
+        os.makedirs(outPath)
+
+    for i in range(int((ulLat - lrLat) / 2) + 1):
+        for j in range(int((lrLon - ulLon) / 2) + 1):
+            tarTile = ulTile - i * 180 + j
+            for year in range(startYear, endYear + 1):
+                os.system('wget %s/%d/%d_%d/%s.nc -O %s/%d_%d_%s.nc' % \
+                          (baseURL, year, tarTile, year, option, outPath, tarTile, year, option))
     
     cmdTrans = ['gdal_translate', '-of', 'GTiff', '-a_ullr','','','','',\
                 '-a_srs', '+proj=lcc +datum=WGS84 +lat_1=25 n +lat_2=60n \
                 +lat_0=42.5n +lon_0=100w','','']
 
     # convert downloaded nc file to geotiff
-    for ncFile in glob('%s*.nc'%option):
-        year = int(ncFile.split('_')[1])
-        tile = ncFile.split('_')[2].split('.')[0]
-
+    for ncFile in glob('%s/*%s.nc' % (outPath, option)):
+        print ncFile
+        hint = ncFile.split('%s' % outPath)[1][1:]
+        
+        tile = int(hint.split('_')[0])
+        year = int(hint.split('_')[1])
+        print hint, tile, year 
         # Regular experssions for coords extraction
         if len(daymetCoords) == 0:
             
@@ -71,7 +101,7 @@ def getDaymetData(tiffName, ulLat, ulLon, lrLat, lrLon, startYear=2013, endYear=
         cmdTrans[6] = daymetCoords['LR'][0]
         cmdTrans[7] = daymetCoords['LR'][1]
         cmdTrans[-2] = 'NETCDF:"%s":%s'%(ncFile, option)
-        cmdTrans[-1] = 'daymet/%s_%s_%d_%s.tif' %(tiffName, option, year, tile)
+        cmdTrans[-1] = '%s/%d_%d_%s.tif' %(outPath, tile, year, option)
 
         #print cmdTrans
         process = Popen(cmdTrans, stdout=PIPE, shell=False)
@@ -87,19 +117,23 @@ def getDaymetData(tiffName, ulLat, ulLon, lrLat, lrLon, startYear=2013, endYear=
         if process.returncode != 0:
             raise RuntimeError("%r failed, status code %s stdout %r stderr %r" % \
                                 (cmdClear, process.returncode, output, err))
-    """    
-    for year in range(startYear, endYear + 1):
     
-        cmdComb = ['gdalwarp', '-dstnodata', '-9999','daymet/%s_%s_%d_*.tif' %\
-                   (tiffName, option, year)]
-
-        process = Popen(cmdComb, stdout=PIPE, shell=False)
-        output, err = process.communicate()
-        if process.returncode != 0:
-            raise RuntimeError("%r failed, status code %s stdout %r stderr %r" % \
-                                (cmdComb, process.returncode, output, err))
-    """
-
+    # Combine all tiles in target region for the year range
+    if ulTile != lrTile:
+        for year in range(startYear, endYear + 1):
+            suffix = '%d_%s' % (year, option)
+            cmdComb = ['gdalwarp', '-dstnodata', '-9999',\
+                       '{0}/*_{1}.tif'.format(outPath, suffix),
+                       '{0}/all_{1}.tif'.format(outPath, suffix)
+                       ]
+            os.system('gdalwarp -dstnodata -9999 {0}/*_{1}.tif {0}/all_{1}.tif'.format(outPath, suffix))
+            """
+            process = Popen(cmdComb, stdout=PIPE, shell=False)
+            output, err = process.communicate()
+            if process.returncode != 0:
+                raise RuntimeError("%r failed, status code %s stdout %r stderr %r" % \
+                                    (cmdComb, process.returncode, output, err))
+            """
 def projDem(inTiff, ulx, uly, lrx, lry, outTiff):
     
     cmdProj = ['gdal_translate', '-projwin', '%s'%ulx, '%s'%uly, '%s'%lrx, '%s'%lry, \
@@ -193,13 +227,14 @@ def main():
     tiffName = demParser.getName()
     #print endYr, startYr
     # download daymet data   
+    print coords
     for opt in params:
         getDaymetData(tiffName, coords[1][0], coords[1][1], coords[0][0], coords[0][1], \
                       startYr, endYr, opt)
     #print projs
     #print coords
-    projDem('na_dem.tif', projs[1][0], projs[1][1], projs[0][0], projs[0][1],\
-                  tiffName + '_dem.tif')
+    #projDem('na_dem.tif', projs[1][0], projs[1][1], projs[0][0], projs[0][1],\
+    #              tiffName + '_dem.tif')
     """ 
     # Clear netcaf data
     cmdClear = ['rm', '*.nc']
