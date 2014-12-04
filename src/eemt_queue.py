@@ -77,7 +77,6 @@ def init_wq(name, password_file):
 	wq = WorkQueue(0)
 	wq.specify_name(name)
 	wq.specify_password_file(password_file)
-	wq.specify_mode(WORK_QUEUE_MASTER_MODE_CATALOG)
 	wq.cctools_debug_flags_set('all')
 	print 'Started Work Queue process with project name %s\n' % name
 		
