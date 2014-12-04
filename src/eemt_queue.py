@@ -130,8 +130,7 @@ def calc_sun(wq, input_dir, output_dir):
 		sun_flat = output_dir + 'sun_%d_flat' % day
 		sun_total = output_dir + 'sun_%d_total' % day
 
-		command = '%s %s %d %s %s' % (script, dem, day, 
-			sun_flat, sun_total)
+		command = 'rsun.sh pit_c.tif %s sun_%d_flat sun_%d_total' % (day, day, day)
 
 		# Create the task
 		t = Task(command)
@@ -231,13 +230,14 @@ def start_wq(wq, total):
 	while not wq.empty(): 
 		t = wq.wait(5)
 		print 'Waiting for completion....'
-		if t: 
+		
+		if t.return_status == 0: 
 			print 'Finished task %d of %d. %2.2f%% completed.' % (t.id, total, float(t.id / total))
 
-			if t.return_status != 0:
-				print 'Task %d failed. Resubmitting.'
-				wq.submit(t)
-				total += 1 
+		else:
+			print 'Task %d failed. Resubmitting.' % t.id
+			wq.submit(t)
+			total += 1 
 
 	print 'Finished generating the EEMT model. '
 # End start_wq(wq)
