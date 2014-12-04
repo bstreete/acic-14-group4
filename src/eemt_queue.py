@@ -231,13 +231,14 @@ def start_wq(wq, total):
 		t = wq.wait(5)
 		print 'Waiting for completion....'
 		
-		if t.return_status == 0: 
-			print 'Finished task %d of %d. %2.2f%% completed.' % (t.id, total, float(t.id / total))
+		if t:
+			if t.return_status == 0: 
+				print 'Finished task %d of %d. %2.2f%% completed.' % (t.id, total, float(t.id / total))
 
-		else:
-			print 'Task %d failed. Resubmitting.' % t.id
-			wq.submit(t)
-			total += 1 
+			else:
+				print 'Task %d failed. Resubmitting.' % t.id
+				wq.submit(t)
+				total += 1 
 
 	print 'Finished generating the EEMT model. '
 # End start_wq(wq)
