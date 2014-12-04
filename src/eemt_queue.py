@@ -143,9 +143,8 @@ def calc_sun(wq, input_dir, output_dir):
 		t.specify_file(sun_total, sun_total, WORK_QUEUE_OUTPUT, cache = True)
 
 		taskid = wq.submit(t)
-		print 'Submitted task #%d.' % taskid
-			
 		total += 1
+	# End loop
 
 	return wq, total
 
@@ -214,10 +213,10 @@ def calc_model(wq, input_dir, output_dir, start, end):
 			files.remove(sun_flat)
 
 			taskid = wq.submit(t)
-			print 'Submitted task #%d.' % taskid
 
 			total += 1
-		# End loop
+		# End yearly loop
+	# End daily loop
 
 	return wq, total
 # End calc_model(wq)
@@ -235,7 +234,7 @@ def start_wq(wq, total):
 		if t: 
 			print 'Finished task %d of %d. %2.2f%% completed.' % (t.id, total, float(t.id / total))
 
-			if task.return_status != 0:
+			if t.return_status != 0:
 				print 'Task %d failed. Resubmitting.'
 				wq.submit(t)
 				total += 1 
