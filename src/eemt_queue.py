@@ -58,6 +58,7 @@ def driver(args):
 	# Create the tasks
 	wq, total = create_tasks(wq, input_dir, output_dir, args[5], args[6])
 
+	print 'Workqueue is listening for project %s.\n' % args[2]
 	# Wait for Completion
 	start_wq(wq, total)
 
@@ -76,6 +77,8 @@ def init_wq(name, password_file):
 		wq = WorkQueue(0)
 		wq.specify_name(name)
 		wq.specify_password_file(password_file)
+		wq.specify_mode(WORK_QUEUE_MASTER_MODE_CATALOG)
+		wq.cctools_debug_flags_set('all')
 		print 'Started Work Queue process with project name %s\n' % name
 		
 	# Catch the errors
@@ -236,7 +239,6 @@ def start_wq(wq, total):
 				print 'Task %d failed. Resubmitting.'
 				wq.submit(t)
 				total += 1 
-
 
 	print 'Finished generating the EEMT model. '
 # End start_wq(wq)
