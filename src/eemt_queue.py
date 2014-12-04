@@ -48,7 +48,7 @@ def driver(args):
 	wq = init_wq(args[1], password_file)
 
 	# Create the tasks
-	wq, total = create_tasks(wq, input_dir¸ args[4], args[5])
+	wq, total = create_tasks(wq, input_dir, args[4], args[5])
 
 	# Wait for Completion
 	start_wq(wq, total)
