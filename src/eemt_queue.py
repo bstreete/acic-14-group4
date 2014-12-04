@@ -133,7 +133,6 @@ def calc_sun(wq, input_dir, output_dir):
 		command = '%s %s %d %s %s' % (script, dem, day, 
 			sun_flat, sun_total)
 
-		print command
 		# Create the task
 		t = Task(command)
 
@@ -143,7 +142,9 @@ def calc_sun(wq, input_dir, output_dir):
 		t.specify_file(sun_flat, sun_flat, WORK_QUEUE_OUTPUT, cache = True)
 		t.specify_file(sun_total, sun_total, WORK_QUEUE_OUTPUT, cache = True)
 
-		wq.submit(t)
+		taskid = wq.submit(t)
+		print 'Submitted task #%d.' % taskid
+			
 		total += 1
 
 	return wq, total
@@ -191,8 +192,6 @@ def calc_model(wq, input_dir, output_dir, start, end):
 
 			command = '%s %s %s' % (script, ' '.join(files), output)
 
-			print command
-
 			t = Task(command)
 
 			# List all of the necessary input files 
@@ -214,7 +213,9 @@ def calc_model(wq, input_dir, output_dir, start, end):
 			files.remove(sun_total)
 			files.remove(sun_flat)
 
-			wq.submit(t)
+			taskid = wq.submit(t)
+			print 'Submitted task #%d.' % taskid
+
 			total += 1
 		# End loop
 
