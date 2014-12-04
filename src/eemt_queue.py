@@ -12,6 +12,9 @@ Arguments List:
 3 - Input Directory
 4 - Starting Year
 5 - Ending Year
+
+It assumes that is has been called from the root directory of the project,
+and uses the appropriate relative paths to the individual scripts. 
 """
 
 def driver(args):
@@ -25,18 +28,9 @@ def driver(args):
 	# Save the directories
 	input_dir = os.path.join(os.getcwd(), args[3])
 	password_file = os.path.join(os.getcwd(), args[2])
-	# script_dir = os.path.join(os.getcwd(), src)
 
 	# Check the input directory then change to it
-	if os.path.isdir(input_dir):
-		try:
-			os.chdir(input_dir)
-		except OSError: 
-			print 'Unable to change to input directory. Please verify the path and associated permissions.'
-			print 'Given directory: %s' % input_dir
-
-			sys.exit(1)
-	else:
+	if not os.path.isdir(input_dir):	
 		print 'Input directory does not exist. Please verify the path and associated permissions.'
 		print 'Given directory: %s' % input_dir
 
@@ -54,7 +48,7 @@ def driver(args):
 	wq = init_wq(args[1], password_file)
 
 	# Create the tasks
-	wq, total = create_tasks(wq, args[4], args[5])
+	wq, total = create_tasks(wq, input_dir¸ args[4], args[5])
 
 	# Wait for Completion
 	start_wq(wq, total)
@@ -84,7 +78,7 @@ def init_wq(name, password_file):
 	return wq
 # End init_wq(name, password_file)
 
-def create_tasks(wq, start, end):
+def create_tasks(wq, input_dir, start, end):
 	"""
 	Creates the tasks needed to generate R.Sun for the area of interest,
 	upscale Daymet's weather information in the given area to match the 
@@ -94,11 +88,11 @@ def create_tasks(wq, start, end):
 
 	print 'Preparing to generate solar irradiation model....\n'
 	# Generate the R.Sun calculations first
-	wq, sun_total = calc_sun(wq)
+	wq, sun_total = calc_sun(wq, input_dir)
 
 	print 'Preparing to upscale weather data....\n'
 	# Generate the Upscaled weather data/EEMT model
-	wq, model_total = calc_model(wq, start, end) 
+	wq, model_total = calc_model(wq, input_dir, start, end) 
 
 	total = sun_total + model_total
 
@@ -107,7 +101,7 @@ def create_tasks(wq, start, end):
 	return wq, total
 # End create_tasks()
 
-def calc_sun(wq): 
+def calc_sun(wq, input_dir): 
 	"""
 	Generates the Work Queue tasks to calculate r.sun for every 
 	day of the year with a time step of 0.05 for the given input
@@ -117,7 +111,7 @@ def calc_sun(wq):
 
 	total = 0 
 	script = 'src/rsun.sh'
-	dem = 'pit_c.tif'
+	dem = input_dir + 'pit_c.tif'
 	
 	# Start iterating over the days of the year
 	for day in xrange(1,366):
@@ -146,7 +140,7 @@ def calc_sun(wq):
 
 # End calc_sun(wq)
 
-def calc_model(wq, start, end):
+def calc_model(wq, input_dir, start, end):
 	"""
 	Generates the work queue tasks to upscale all of the climate 
 	data downloaded from Daymet for the appropriate input area. Once the 
@@ -158,9 +152,9 @@ def calc_model(wq, start, end):
 	total = 0 
 	files = list()
 
-	files.append('pit_c.tif')
-	files.append('twi_c.tif')
-	files.append('na_dem.part.tif')
+	files.append(input_dir + 'pit_c.tif')
+	files.append(input_dir + 'twi_c.tif')
+	files.append(input_dir + 'na_dem.part.tif')
 	script = 'src/reemt.sh'
 
 	# Loop here 
