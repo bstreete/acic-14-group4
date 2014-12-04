@@ -58,7 +58,7 @@ def driver(args):
 	# Create the tasks
 	wq, total = create_tasks(wq, input_dir, output_dir, args[5], args[6])
 
-	print 'Workqueue is listening for project %s.\n' % args[2]
+	print 'Workqueue is listening for project %s.\n' % args[1]
 	# Wait for Completion
 	start_wq(wq, total)
 
@@ -76,7 +76,7 @@ def init_wq(name, password_file):
 	# try:
 	wq = WorkQueue(0)
 	wq.specify_name(name)
-	wq.specify_password_file(password_file)
+	# wq.specify_password_file(password_file)
 	cctools_debug_flags_set('all')
 	print 'Started Work Queue process with project name %s\n' % name
 		
