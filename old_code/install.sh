@@ -8,7 +8,7 @@
 sudo apt-get update -y
 
 # Install Applications
-sudo apt-get install -y grass-dev coop-computing-tools python-rpy2 git r-base
+sudo apt-get install -y grass-dev coop-computing-tools python-rpy2 git r-base python-workqueue
 
 # Get iCommands 
 wget http://www.iplantcollaborative.org/sites/default/files/irods/icommands.x86_64.tar.bz2
