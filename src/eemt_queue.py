@@ -10,8 +10,9 @@ Arguments List:
 1 - Project Name 
 2 - Password File
 3 - Input Directory
-4 - Starting Year
-5 - Ending Year
+4 - Output Directory
+5 - Starting Year
+6 - Ending Year
 
 It assumes that is has been called from the root directory of the project,
 and uses the appropriate relative paths to the individual scripts. 
@@ -20,18 +21,25 @@ and uses the appropriate relative paths to the individual scripts.
 def driver(args):
 
 	# Initial Argument Verification
-	if len(args) != 6: 
-		print 'Usage: %s project_name password_file input_dir start_year end_year' % args[0]
+	if len(args) != 7: 
+		print 'Usage: %s project_name password_file input_dir output_dir start_year end_year' % args[0]
 		print 'All fields are required in the specified order. Aborting.'
 		sys.exit(1)
 
 	# Save the directories
 	input_dir = os.path.join(os.getcwd(), args[3])
+	output_dir = args[4]
 	password_file = os.path.join(os.getcwd(), args[2])
 
 	# Check the input directory then change to it
 	if not os.path.isdir(input_dir):	
 		print 'Input directory does not exist. Please verify the path and associated permissions.'
+		print 'Given directory: %s' % input_dir
+
+		sys.exit(1)
+
+	if not os.path.isdir(output_dir):
+		print 'Output directory does not exist. Please verify the path and associated permissions.'
 		print 'Given directory: %s' % input_dir
 
 		sys.exit(1)
@@ -48,7 +56,7 @@ def driver(args):
 	wq = init_wq(args[1], password_file)
 
 	# Create the tasks
-	wq, total = create_tasks(wq, input_dir, args[4], args[5])
+	wq, total = create_tasks(wq, input_dir, output_dir, args[5], args[6])
 
 	# Wait for Completion
 	start_wq(wq, total)
@@ -78,7 +86,7 @@ def init_wq(name, password_file):
 	return wq
 # End init_wq(name, password_file)
 
-def create_tasks(wq, input_dir, start, end):
+def create_tasks(wq, input_dir, output_dir, start, end):
 	"""
 	Creates the tasks needed to generate R.Sun for the area of interest,
 	upscale Daymet's weather information in the given area to match the 
@@ -88,11 +96,11 @@ def create_tasks(wq, input_dir, start, end):
 
 	print 'Preparing to generate solar irradiation model....\n'
 	# Generate the R.Sun calculations first
-	wq, sun_total = calc_sun(wq, input_dir)
+	wq, sun_total = calc_sun(wq, input_dir, output_dir)
 
 	print 'Preparing to upscale weather data....\n'
 	# Generate the Upscaled weather data/EEMT model
-	wq, model_total = calc_model(wq, input_dir, start, end) 
+	wq, model_total = calc_model(wq, input_dir, output_dir, start, end) 
 
 	total = sun_total + model_total
 
@@ -101,7 +109,7 @@ def create_tasks(wq, input_dir, start, end):
 	return wq, total
 # End create_tasks()
 
-def calc_sun(wq, input_dir): 
+def calc_sun(wq, input_dir, output_dir): 
 	"""
 	Generates the Work Queue tasks to calculate r.sun for every 
 	day of the year with a time step of 0.05 for the given input
@@ -117,8 +125,8 @@ def calc_sun(wq, input_dir):
 	for day in xrange(1,366):
 	
 		# Generate the names of the output files
-		sun_flat = 'sun_%d_flat' % day
-		sun_total = 'sun_%d_total' % day
+		sun_flat = output_dir + 'sun_%d_flat' % day
+		sun_total = output_dir + 'sun_%d_total' % day
 
 		command = '%s %s %d %s %s' % (script, dem, day, 
 			sun_flat, sun_total)
@@ -140,7 +148,7 @@ def calc_sun(wq, input_dir):
 
 # End calc_sun(wq)
 
-def calc_model(wq, input_dir, start, end):
+def calc_model(wq, input_dir, output_dir, start, end):
 	"""
 	Generates the work queue tasks to upscale all of the climate 
 	data downloaded from Daymet for the appropriate input area. Once the 
@@ -168,15 +176,22 @@ def calc_model(wq, input_dir, start, end):
 			# wildcard for prcp
 			prcp = glob.glob('daymet/*/*_%d_prcp.tif' % year)
 
-			files.insert(tmin[0], 1)
-			files.insert(tmax[0], 2)
-			files.insert(prcp[0], 4)
+			sun_flat = output_dir + 'sun_%d_flat' % day
+			sun_total = output_dir + 'sun_%d_total' % day
 
-			command = '%s %s %d' % (script, ' '.join(files), day)
+			files.insert(1, tmin[0])
+			files.insert(2, tmax[0])
+			files.insert(4, prcp[0])
+			files.append(sun_total)
+			files.append(sun_flat)
+
+			output = output_dir + 'eemt_%d_%d.tif' % (year, day)
+
+			command = '%s %s %s' % (script, ' '.join(files), output)
 
 			print command
 
-			t.Task(command)
+			t = Task(command)
 
 			# List all of the necessary input files 
 			for filename in files: 
@@ -189,6 +204,13 @@ def calc_model(wq, input_dir, start, end):
 
 			# Specify the output file
 			t.specify_file(output, output, WORK_QUEUE_OUTPUT, cache = False)
+
+			# Remove the files that have variable names
+			files.remove(tmin[0])
+			files.remove(tmax[0])
+			files.remove(prcp[0])
+			files.remove(sun_total)
+			files.remove(sun_flat)
 
 			wq.submit(t)
 			total += 1
