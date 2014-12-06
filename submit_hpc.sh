@@ -102,6 +102,7 @@ while getopts ":eg:n:p:a:sw:" o ; do
 			echo $'\t-g\tSpecify the group to charge for resource utilization.'
 			echo $'\t-n\tSets the number of workers to request. Defaults to 1.'
 			echo $'\t-p\tSpecify the project name to connect the worker to. Defaults to trad_eemt'
+			echo $'\t-a\tSpecify the IP and port of the master. Enclose them in double quotes. Cannot be used with -p.'
 			echo $'\t-s\tSets the priority to standard. Default is windfall.'
 			echo $'\t-w\tSpecify the walltime for the calculations in hours. Defaults to 1 hour.'
 
@@ -144,17 +145,16 @@ __EOF__
 
 ### End of PBS Code
 
-# # Change the script to an executable and submit it with qsub
-# chmod 755 $SCRIPT
-# INDEX=0
+# Change the script to an executable and submit it with qsub
+chmod 755 $SCRIPT
+INDEX=0
 
-# while [ $INDEX -lt $NODES ] ; do 
-# 	qsub $SCRIPT
-# 	INDEX=$(( $INDEX + 1))
-# done
+while [ $INDEX -lt $NODES ] ; do 
+	qsub $SCRIPT
+	INDEX=$(( $INDEX + 1))
+done
 
-# rm $SCRIPT
-cat $SCRIPT
+rm $SCRIPT
 
 # Check the status of the submission
 qstat -u $USER
