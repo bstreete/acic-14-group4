@@ -15,10 +15,10 @@ PRIORITY="windfall"
 NODES=1
 EMAIL="#"
 WALLTIME=1
-PROJECT=trad_eemt
+MASTER="-M trad_eemt"
 
 # Read and process the arguments
-while getopts ":eg:n:p:sw:" o ; do
+while getopts ":eg:n:p:a:sw:" o ; do
 	case "${o}" in 
 		# s = standard priority
 		s)
@@ -83,7 +83,12 @@ while getopts ":eg:n:p:sw:" o ; do
 
 		# p = Makeflow/WorkQueue Project Name
 		p)
-			PROJECT=${OPTARG}
+			PROJECT="-M ${OPTARG}"
+			;;
+
+		# a = Master address/port combination
+		a)
+			PROJECT=${OPTARG}}
 			;;
 
 		# Default Case = Unknown option
@@ -139,16 +144,17 @@ __EOF__
 
 ### End of PBS Code
 
-# Change the script to an executable and submit it with qsub
-chmod 755 $SCRIPT
-INDEX=0
+# # Change the script to an executable and submit it with qsub
+# chmod 755 $SCRIPT
+# INDEX=0
 
-while [ $INDEX -lt $NODES ] ; do 
-	qsub $SCRIPT
-	INDEX=$(( $INDEX + 1))
-done
+# while [ $INDEX -lt $NODES ] ; do 
+# 	qsub $SCRIPT
+# 	INDEX=$(( $INDEX + 1))
+# done
 
-rm $SCRIPT
+# rm $SCRIPT
+cat $SCRIPT
 
 # Check the status of the submission
 qstat -u $USER
