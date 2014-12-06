@@ -138,7 +138,7 @@ cd $PWD
 source /usr/share/Modules/init/csh
 
 date
-work_queue_submit -M $PROJECT
+work_queue_submit $PROJECT
 date
 __EOF__
 
