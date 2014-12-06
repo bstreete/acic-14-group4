@@ -88,7 +88,7 @@ while getopts ":eg:n:p:a:sw:" o ; do
 
 		# a = Master address/port combination
 		a)
-			PROJECT=${OPTARG}}
+			PROJECT=${OPTARG}
 			;;
 
 		# Default Case = Unknown option
