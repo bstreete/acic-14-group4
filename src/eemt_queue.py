@@ -144,7 +144,7 @@ def calc_sun(wq, input_dir, output_dir):
 
 		# Specify input and output files
 		t.specify_file(script, 'rsun.sh', WORK_QUEUE_INPUT, cache = True)
-		t.specify_file('./' + input_dir, 'pit_c.tif', WORK_QUEUE_INPUT, cache = True)
+		t.specify_file('pit_c.tif', dem, WORK_QUEUE_INPUT, cache = True)
 		t.specify_file(sun_flat, 'sun_%d_flat.tif' % day, WORK_QUEUE_OUTPUT, cache = True)
 		t.specify_file(sun_total, 'sun_%d_total.tif' % day, WORK_QUEUE_OUTPUT, cache = True)
 
