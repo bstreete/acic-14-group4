@@ -209,10 +209,8 @@ if [ $? -ne 0 ] ; then
 	exit 1
 fi
 
-# Create the Makeflow/Work Queue tasks for Weifeng here
-
 # Start makeflow 
-#workflow -T wq -N $PROJ_NAME 
+src/eemt_queue.py $PROJ_NAME README.md $INPUT_DIR $OUTPUT_DIR $START_YEAR $END_YEAR
 
 # Finished creating model. Organize data.
 echo
