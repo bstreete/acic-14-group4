@@ -72,7 +72,7 @@ def init_wq(name, password_file):
 	before calling this function. 
 	"""
 
-	port = 9000
+	port = 9123
 	while True:
 		# Try to create the queue with a random port and specified name
 		try:
@@ -81,12 +81,16 @@ def init_wq(name, password_file):
 			# wq.specify_password_file(password_file)
 			# cctools_debug_flags_set('all')
 			print 'Started Work Queue process with project name %s\n' % name
-			
+			break
 		# Catch the errors
 		except:
 			print 'Failed to initialize work queue process on port %d. Retrying.' % port
 			port += 1
-			
+
+		if port > 10000:
+			print 'Unable to start work queue process. Aborting.'
+			sys.exit(1)
+
 	return wq
 # End init_wq(name, password_file)
 
