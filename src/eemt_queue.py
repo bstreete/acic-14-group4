@@ -133,10 +133,10 @@ def calc_sun(wq, input_dir, output_dir):
 	for day in xrange(1,366):
 	
 		# Generate the names of the output files
-		sun_flat = output_dir + 'sun_%d_flat' % day
-		sun_total = output_dir + 'sun_%d_total' % day
+		sun_flat = output_dir + 'sun_%d_flat.tif' % day
+		sun_total = output_dir + 'sun_%d_total.tif' % day
 
-		command = 'rsun.sh pit_c.tif %s sun_%d_flat sun_%d_total' % (day, day, day)
+		command = './rsun.sh pit_c.tif %s sun_%d_flat.tif sun_%d_total.tif' % (day, day, day)
 
 		# Create the task
 		t = Task(command)
@@ -144,8 +144,8 @@ def calc_sun(wq, input_dir, output_dir):
 		# Specify input and output files
 		t.specify_file(script, 'rsun.sh', WORK_QUEUE_INPUT, cache = True)
 		t.specify_file(dem, 'pit_c.tif', WORK_QUEUE_INPUT, cache = True)
-		t.specify_file(sun_flat, 'sun_%d_flat' % day, WORK_QUEUE_OUTPUT, cache = True)
-		t.specify_file(sun_total, 'sun_%d_total' % day, WORK_QUEUE_OUTPUT, cache = True)
+		t.specify_file(sun_flat, 'sun_%d_flat.tif' % day, WORK_QUEUE_OUTPUT, cache = True)
+		t.specify_file(sun_total, 'sun_%d_total.tif' % day, WORK_QUEUE_OUTPUT, cache = True)
 
 		taskid = wq.submit(t)
 		total += 1
@@ -183,7 +183,7 @@ def calc_model(wq, input_dir, output_dir, start, end):
 			# wildcard for prcp
 			prcp = glob.glob('daymet/*/*_%d_prcp.tif' % year)
 
-			sun_flat = output_dir + 'sun_%d_flat' % day
+			sun_flat = output_dir + 'sun_%d_flat.tif' % day
 			sun_total = output_dir + 'sun_%d_total' % day
 
 			files.insert(1, tmin[0])
@@ -235,7 +235,6 @@ def start_wq(wq, total):
 	# Check every 5 seconds for completed tasks
 	while not wq.empty(): 
 		t = wq.wait(5)
-		print 'Waiting for completion....'
 		
 		if t:
 			if t.return_status == 0: 
