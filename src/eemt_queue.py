@@ -79,7 +79,7 @@ def init_wq(name, password_file):
 			wq = WorkQueue(port)
 			wq.specify_name(name)
 			# wq.specify_password_file(password_file)
-			# cctools_debug_flags_set('all')
+			cctools_debug_flags_set('all')
 			print 'Started Work Queue process with project name %s\n' % name
 			break
 		# Catch the errors
