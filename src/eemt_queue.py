@@ -27,8 +27,8 @@ def driver(args):
 		sys.exit(1)
 
 	# Save the directories
-	input_dir = args[3]
-	output_dir = args[4]
+	input_dir = os.path.join(os.getcwd(), args[3])
+	output_dir = os.path.join(os.getcwd(), args[4])
 	password_file = os.path.join(os.getcwd(), args[2])
 
 	# Check the input directory then change to it
@@ -144,7 +144,7 @@ def calc_sun(wq, input_dir, output_dir):
 
 		# Specify input and output files
 		t.specify_file(script, 'rsun.sh', WORK_QUEUE_INPUT, cache = True)
-		t.specify_file('pit_c.tif', dem, WORK_QUEUE_INPUT, cache = True)
+		t.specify_file(dem, 'pit_c.tif', WORK_QUEUE_INPUT, cache = True)
 		t.specify_file(sun_flat, 'sun_%d_flat.tif' % day, WORK_QUEUE_OUTPUT, cache = True)
 		t.specify_file(sun_total, 'sun_%d_total.tif' % day, WORK_QUEUE_OUTPUT, cache = True)
 
