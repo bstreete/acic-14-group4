@@ -28,7 +28,7 @@ def driver(args):
 
 	# Save the directories
 	input_dir = os.path.join(os.getcwd(), args[3])
-	output_dir = args[4]
+	output_dir = os.path.join(os.getcwd(), args[4])
 	password_file = os.path.join(os.getcwd(), args[2])
 
 	# Check the input directory then change to it
@@ -136,7 +136,7 @@ def calc_sun(wq, input_dir, output_dir):
 		sun_flat = output_dir + 'sun_%d_flat.tif' % day
 		sun_total = output_dir + 'sun_%d_total.tif' % day
 
-		command = './rsun.sh pit_c.tif %s sun_%d_flat.tif sun_%d_total.tif' % (day, day, day)
+		command = './rsun.sh pit_c.tif %s sun_%d_total.tif sun_%d_flat.tif' % (day, day, day)
 
 		# Create the task
 		t = Task(command)
