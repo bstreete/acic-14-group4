@@ -241,6 +241,9 @@ def start_wq(wq, total):
 				print 'Finished task %d of %d. %2.2f%% completed.' % (t.id, total, float(t.id / total))
 
 			else:
+
+				print 'Task failed: Logs: \n'
+				print t.output
 				print 'Task %d failed. Resubmitting.' % t.id
 				wq.submit(t)
 				total += 1 
