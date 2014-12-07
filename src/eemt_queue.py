@@ -129,6 +129,8 @@ def calc_sun(wq, input_dir, output_dir):
 	script = 'src/rsun.sh'
 	dem = input_dir + 'pit_c.tif'
 	
+	print 'DEM: %s' % dem
+	
 	# Start iterating over the days of the year
 	for day in xrange(1,366):
 	
