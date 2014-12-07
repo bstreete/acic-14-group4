@@ -27,7 +27,7 @@ def driver(args):
 		sys.exit(1)
 
 	# Save the directories
-	input_dir = os.path.join(os.getcwd(), args[3])
+	input_dir = args[3]
 	output_dir = args[4]
 	password_file = os.path.join(os.getcwd(), args[2])
 
