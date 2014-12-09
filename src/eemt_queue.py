@@ -154,7 +154,7 @@ def calc_sun(wq, input_dir, output_dir):
 	
 
 	# Start iterating over the days of the year
-	for day in xrange(1,2):
+	for day in xrange(1,366):
 	
 		# Generate the names of the output files
 		sun_flat = output_dir + 'sun_%d_flat.tif' % day
@@ -195,7 +195,7 @@ def calc_model(wq, input_dir, output_dir, start, end):
 	script = 'src/reemt.sh'
 
 	# Loop here 
-	for day in range(1, 2): 
+	for day in range(1, 366): 
 
 		for year in range(int(start), int(end) + 1): 
 			# wildcard for tmin
