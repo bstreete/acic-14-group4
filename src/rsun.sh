@@ -4,7 +4,7 @@ if [ -d ${HOME}/grassdata ]; then
 rm -rf "${HOME}/grassdata"
 fi
 START_DIR=${PWD}
-TEMP_DIR='tmp_${RANDOM}_$((date))'
+TEMP_DIR='tmp_${RANDOM}_$((date +%s.%N))'
 cd ${HOME}
 mkdir grassdata
 cd /grassdata
