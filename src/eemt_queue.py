@@ -246,7 +246,7 @@ def start_wq(wq, total):
 		
 		if t:
 			if t.return_status == 0: 
-				print 'Finished task %d of %d. %2.2f%% completed.' % (t.id, total, float(t.id / total))
+				print 'Finished task %d of %d. %2.2f%% completed.' % (t.id, total, float(float(t.id) / float(total))
 
 			else:
 
