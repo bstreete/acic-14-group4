@@ -189,11 +189,9 @@ def calc_model(wq, input_dir, output_dir, start, end):
 	"""
 
 	total = 0 
-	files = list()
-
-	files.append(input_dir + 'pit_c.tif')
-	files.append(input_dir + 'twi_c.tif')
-	files.append(input_dir + 'na_dem.part.tif')
+	pit = input_dir + 'pit_c.tif'
+	twi = input_dir + 'twi_c.tif'
+	daymet = input_dir + 'na_dem.part.tif'
 	script = 'src/reemt.sh'
 
 	# Loop here 
@@ -210,36 +208,22 @@ def calc_model(wq, input_dir, output_dir, start, end):
 			sun_flat = output_dir + 'sun_%d_flat.tif' % day
 			sun_total = output_dir + 'sun_%d_total' % day
 
-			files.insert(1, tmin[0])
-			files.insert(2, tmax[0])
-			files.insert(4, prcp[0])
-			files.append(sun_total)
-			files.append(sun_flat)
-
 			output = output_dir + 'eemt_%d_%d.tif' % (year, day)
 
-			command = '%s %s %s' % (script, ' '.join(files), output)
-
+			command = './reemt.sh pit_c.tif tmin.tif tmax.tif twi_c.tif prcp.tif na_dem.part.tif sun_total.tif sun_flat.tif eemt.tif'
 			t = Task(command)
 
 			# List all of the necessary input files 
-			for filename in files: 
-				t.specify_file(filename, filename, WORK_QUEUE_INPUT, 
-					cache = True)
-
-			# Insert the executable 
-			t.specify_file(script, script, WORK_QUEUE_INPUT, 
-				cache = True)
-
-			# Specify the output file
-			t.specify_file(output, output, WORK_QUEUE_OUTPUT, cache = False)
-
-			# Remove the files that have variable names
-			files.remove(tmin[0])
-			files.remove(tmax[0])
-			files.remove(prcp[0])
-			files.remove(sun_total)
-			files.remove(sun_flat)
+			t.specify_input_file(script, 'reemt.sh')
+			t.specify_input_file(pit, 'pit_c.tif')
+			t.specify_input_file(twi, 'twi_c.tif')
+			t.specify_input_file(daymet, 'na_dem.part.tif')
+			t.specify_input_file(tmin, 'tmin.tif')
+			t.specify_input_file(tmax, 'tmax.tif')
+			t.specify_input_file(prcp, 'prcp.tif')
+			t.specify_input_file(sun_flat, 'sun_flat.tif')
+			t.specify_input_file(sun_total, 'sun_total.tif')
+			t.specify_output_file(output, 'eemt.tif')
 
 			taskid = wq.submit(t)
 
