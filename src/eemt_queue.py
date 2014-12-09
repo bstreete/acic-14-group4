@@ -25,7 +25,7 @@ def driver(args):
 		print 'Usage: %s project_name input_dir output_dir start_year end_year [password_file]' % args[0]
 		print 'All fields are required in the specified order. Aborting.'
 		sys.exit(1)
-		
+
 	if len(args) > 7: 
 		print 'Usage: %s project_name input_dir output_dir start_year end_year [password_file]' % args[0]
 		print 'All fields are required in the specified order. Aborting.'
@@ -269,7 +269,6 @@ def start_wq(wq, total):
 				print t.output
 				print 'Task %d failed. Resubmitting.' % t.id
 
-				if 
 				wq.submit(t)
 				total += 1 
 
