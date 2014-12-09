@@ -21,7 +21,12 @@ and uses the appropriate relative paths to the individual scripts.
 def driver(args):
 
 	# Initial Argument Verification
-	if len(args) != 6 || len(args) != 7: 
+	if len(args) < 6:
+		print 'Usage: %s project_name input_dir output_dir start_year end_year [password_file]' % args[0]
+		print 'All fields are required in the specified order. Aborting.'
+		sys.exit(1)
+		
+	if len(args) > 7: 
 		print 'Usage: %s project_name input_dir output_dir start_year end_year [password_file]' % args[0]
 		print 'All fields are required in the specified order. Aborting.'
 		sys.exit(1)
