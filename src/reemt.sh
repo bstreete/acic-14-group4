@@ -62,13 +62,14 @@ g.proj -c proj4="+proj=lcc +lat_1=25 +lat_2=60 +lat_0=42.5 +lon_0=-100 +x_0=0 +y
 g.mremove -f "*"
 r.in.gdal input=$1 output=dem_10m
 echo "Elapsed time: $(($(date +%s)-$starttime))"
-r.in.gdal input=$2 output=tmin
+shift 1 
+r.in.gdal input=$2 output=tmin band=$9
 echo "Elapsed time: $(($(date +%s)-$starttime))"
-r.in.gdal input=$3 output=tmax
+r.in.gdal input=$3 output=tmax band=$9
 echo "Elapsed time: $(($(date +%s)-$starttime))"
 r.in.gdal input=$4 output=twi
 echo "Elapsed time: $(($(date +%s)-$starttime))"
-r.in.gdal input=$5 output=prcp
+r.in.gdal input=$5 output=prcp band=$9
 echo "Elapsed time: $(($(date +%s)-$starttime))"
 r.in.gdal input=$6 output=dem_1km
 echo "Elapsed time: $(($(date +%s)-$starttime))"
