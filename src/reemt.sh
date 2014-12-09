@@ -5,7 +5,7 @@
 # fi
 # Save the original directory 
 START_DIR=${PWD}
-TEMP_DIR="tmp_${RANDOM}_$(date +%s.%N)"
+TEMP_DIR="tmp_$(date +%s.%N)"
 cd ${HOME}/grassdata
 mkdir $TEMP_DIR
 cd $TEMP_DIR
@@ -31,14 +31,14 @@ echo "n-s resol3: 1" >> DEFAULT_WIND
 echo "t-b resol: 1" >> DEFAULT_WIND
 cp DEFAULT_WIND WIND
 cd
+
 #WIND and DEFAULT_WIND
-if [ -e ${HOME}/.grassrc ]; then
-rm -f ${HOME}/.grassrc
+if [ ! -e ${HOME}/.grassrc ]; then
+	echo "GISDBASE: ${HOME}/grassdata" >${HOME}/.grassrc
+	echo "LOCATION_NAME: ${TEMP_DIR}" >> ${HOME}/.grassrc
+	echo "MAPSET: PERMANENT" >> ${HOME}/.grassrc
+	echo "GRASS_GUI: text" >> ${HOME}/.grassrc
 fi
-echo "GISDBASE: ${HOME}/grassdata" >${HOME}/.grassrc
-echo "LOCATION_NAME: ${TEMP_DIR}" >> ${HOME}/.grassrc
-echo "MAPSET: PERMANENT" >> ${HOME}/.grassrc
-echo "GRASS_GUI: text" >> ${HOME}/.grassrc
 
 # Return to the original directory
 cd $START_DIR
