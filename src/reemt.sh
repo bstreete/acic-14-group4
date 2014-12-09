@@ -4,56 +4,56 @@
 # rm -rf "${HOME}/grassdata"
 # fi
 # Save the original directory 
-START_DIR=${PWD}
-TEMP_DIR="tmp_$(date +%s.%N)"
-cd ${HOME}/grassdata
-mkdir $TEMP_DIR
-cd $TEMP_DIR
-mkdir PERMANENT
-cd PERMANENT
-echo "proj: 99" > DEFAULT_WIND
-echo "zone: 0" >> DEFAULT_WIND
-echo "north: 1" >> DEFAULT_WIND
-echo "south: 0" >> DEFAULT_WIND
-echo "east: 1" >> DEFAULT_WIND
-echo "west: 0" >> DEFAULT_WIND
-echo "cols: 1" >> DEFAULT_WIND
-echo "rows: 1" >> DEFAULT_WIND
-echo "e-w resol: 1" >> DEFAULT_WIND
-echo "n-s resol: 1" >> DEFAULT_WIND
-echo "top: 1.000000000000000" >> DEFAULT_WIND
-echo "bottom: 0.000000000000000" >> DEFAULT_WIND
-echo "cols3: 1" >> DEFAULT_WIND
-echo "rows3: 1" >> DEFAULT_WIND
-echo "depths: 1" >> DEFAULT_WIND
-echo "e-w resol3: 1" >> DEFAULT_WIND
-echo "n-s resol3: 1" >> DEFAULT_WIND
-echo "t-b resol: 1" >> DEFAULT_WIND
-cp DEFAULT_WIND WIND
-cd
+# START_DIR=${PWD}
+# TEMP_DIR="tmp_$(date +%s.%N)"
+# cd ${HOME}/grassdata
+# mkdir $TEMP_DIR
+# cd $TEMP_DIR
+# mkdir PERMANENT
+# cd PERMANENT
+# echo "proj: 99" > DEFAULT_WIND
+# echo "zone: 0" >> DEFAULT_WIND
+# echo "north: 1" >> DEFAULT_WIND
+# echo "south: 0" >> DEFAULT_WIND
+# echo "east: 1" >> DEFAULT_WIND
+# echo "west: 0" >> DEFAULT_WIND
+# echo "cols: 1" >> DEFAULT_WIND
+# echo "rows: 1" >> DEFAULT_WIND
+# echo "e-w resol: 1" >> DEFAULT_WIND
+# echo "n-s resol: 1" >> DEFAULT_WIND
+# echo "top: 1.000000000000000" >> DEFAULT_WIND
+# echo "bottom: 0.000000000000000" >> DEFAULT_WIND
+# echo "cols3: 1" >> DEFAULT_WIND
+# echo "rows3: 1" >> DEFAULT_WIND
+# echo "depths: 1" >> DEFAULT_WIND
+# echo "e-w resol3: 1" >> DEFAULT_WIND
+# echo "n-s resol3: 1" >> DEFAULT_WIND
+# echo "t-b resol: 1" >> DEFAULT_WIND
+# cp DEFAULT_WIND WIND
+# cd
 
-#WIND and DEFAULT_WIND
-if [ ! -e ${HOME}/.grassrc ]; then
-	echo "GISDBASE: ${HOME}/grassdata" >${HOME}/.grassrc
-	echo "LOCATION_NAME: ${TEMP_DIR}" >> ${HOME}/.grassrc
-	echo "MAPSET: PERMANENT" >> ${HOME}/.grassrc
-	echo "GRASS_GUI: text" >> ${HOME}/.grassrc
-fi
+# #WIND and DEFAULT_WIND
+# if [ ! -e ${HOME}/.grassrc ]; then
+# 	echo "GISDBASE: ${HOME}/grassdata" >${HOME}/.grassrc
+# 	echo "LOCATION_NAME: ${TEMP_DIR}" >> ${HOME}/.grassrc
+# 	echo "MAPSET: PERMANENT" >> ${HOME}/.grassrc
+# 	echo "GRASS_GUI: text" >> ${HOME}/.grassrc
+# fi
 
-# Return to the original directory
-cd $START_DIR
+# # Return to the original directory
+# cd $START_DIR
 
 #Parameter setting
-stepsize=0.5
+stepsize=0.05
 interval=1
 starttime=$(date +%s)
 day=$7
 #set up envvar for UAHPC only
-export GISBASE=/gsfs1/xdisk/nirav/grass/grass-6.4.4
-export PATH="$GISBASE/bin:$GISBASE/scripts:$PATH"
-export LD_LIBRARY_PATH="$GISBASE/lib:/usr/lib:/gsfs1/xdisk/nirav/lib:$LD_LIBRARY_PATH"
-export GRASS_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
-export GISRC=$HOME/.grassrc
+# export GISBASE=/gsfs1/xdisk/nirav/grass/grass-6.4.4
+# export PATH="$GISBASE/bin:$GISBASE/scripts:$PATH"
+# export LD_LIBRARY_PATH="$GISBASE/lib:/usr/lib:/gsfs1/xdisk/nirav/lib:$LD_LIBRARY_PATH"
+# export GRASS_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+# export GISRC=$HOME/.grassrc
 #update project info
 g.proj -c proj4="+proj=lcc +lat_1=25 +lat_2=60 +lat_0=42.5 +lon_0=-100 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"
 #loop head
