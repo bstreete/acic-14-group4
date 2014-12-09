@@ -138,7 +138,7 @@ def calc_sun(wq, input_dir, output_dir):
 		sun_flat = output_dir + 'sun_%d_flat.tif' % day
 		sun_total = output_dir + 'sun_%d_total.tif' % day
 
-		command = './rsun.sh %s %d %s %s' % (dem, day, sun_total, sun_flat)
+		command = '%d %s %d %s %s' % (script, dem, day, sun_total, sun_flat)
 
 		# Create the task
 		t = Task(command)
