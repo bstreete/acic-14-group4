@@ -98,7 +98,8 @@ def init_wq(name, password_file):
 		# Try to create the queue with a random port and specified name
 		try:
 			wq = WorkQueue(port)
-			wq.specify_name(name)
+			wq.specify_name(name)			
+			wq.specify_algorithm(WORK_QUEUE_TASK_ORDER_FIFO)
 
 			if password_file is not None: 
 				wq.specify_password_file(password_file)
