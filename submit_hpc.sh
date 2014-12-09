@@ -114,7 +114,7 @@ done	# End argument reading
 CPUTIME=$(($WALLTIME * $NODES))
 WALLTIME=$WALLTIME:0:0
 
-SCRIPT="qsub_wq_worker_$USER.pbs"
+SCRIPT="qsub_wq_worker_${USER}.pbs"
 
 ### Start of PBS Code
 cat > "${SCRIPT}" << __EOF__
@@ -139,7 +139,7 @@ cd $PWD
 source /usr/share/Modules/init/csh
 
 date
-work_queue_submit $PROJECT
+work_queue_worker $PROJECT
 date
 __EOF__
 
