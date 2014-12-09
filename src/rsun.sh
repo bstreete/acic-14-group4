@@ -12,6 +12,9 @@ day=$2
 outputts=$3
 outputfts=$4
 
+if [ ! -e ${HOME}/grassdata ] ; then
+	mkdir ${HOME}/grassdata
+fi
 
 START_DIR=${PWD}
 TEMP_DIR="tmp_${RANDOM}_$(date +%s.%N)"
