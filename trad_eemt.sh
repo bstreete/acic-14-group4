@@ -227,6 +227,60 @@ if [ $? -ne 0 ] ; then
 	exit 1
 fi
 
+# Set Grass Location: 
+
+echo "Initializing Grass Location information...."
+
+if [ ! -e ${HOME}/grassdata ] ; then
+	mkdir ${HOME}/grassdata
+fi
+
+TEMP_DIR="tmp_${RANDOM}_$(date +%s.%N)"
+mkdir ${HOME}/grassdata/$TEMP_DIR
+mkdir ${HOME}/grassdata/$TEMP_DIR/PERMANENT
+
+# Set wind information
+cat > "${HOME}/grassdata/$TEMP_DIR/PERMANENT/DEFAULT_WIND" << __EOF__
+
+proj: 99
+zone: 0
+north: 1
+south: 0
+east: 1
+west: 0
+cols: 1
+rows: 1
+e-w resol: 1
+n-s resol: 1
+top: 1.000000000000000
+bottom: 0.000000000000000
+cols3: 1
+rows3: 1
+depths: 1
+e-w resol3: 1
+n-s resol3: 1
+t-b resol: 1
+__EOF__
+
+cp ${HOME}/grassdata/$TEMP_DIR/PERMANENT/DEFAULT_WIND ${HOME}/grassdata/$TEMP_DIR/PERMANENT/WIND
+
+#WIND and DEFAULT_WIND
+if [ ! -e ${HOME}/.grassrc ]; then
+	echo "GISDBASE: ${HOME}/grassdata" >${HOME}/.grassrc
+	echo "LOCATION_NAME: ${TEMP_DIR}" >> ${HOME}/.grassrc
+	echo "MAPSET: PERMANENT" >> ${HOME}/.grassrc
+	echo "GRASS_GUI: text" >> ${HOME}/.grassrc
+fi
+
+#set up envvar for UAHPC only
+export GISBASE=/gsfs1/xdisk/nirav/grass/grass-6.4.4
+export PATH="$GISBASE/bin:$GISBASE/scripts:$PATH"
+export LD_LIBRARY_PATH="/gsfs1/xdisk/nirav/grass/grass-6.4.4/lib:/gsfs1/xdisk/nirav/grass-6.4.4/ext/lib:/gsfs1/xdisk/nirav/lib:${LD_LIBRARY_PATH}"
+export GRASS_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+export GISRC="$HOME/.grassrc"
+
+echo "Starting task generation....."
+
 # Start makeflow 
 ${SRC}/src/eemt_queue.py $PROJ_NAME $INPUT_DIR $OUTPUT_DIR $START_YEAR $END_YEAR $PASSWORD 
 
