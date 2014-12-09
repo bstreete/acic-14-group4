@@ -29,6 +29,7 @@ def driver(args):
 	# Save the directories
 	input_dir = args[3]
 	output_dir = args[4]
+	current_dir = os.path.getcwd()
 	password_file = os.path.join(os.getcwd(), args[2])
 
 	# Check the input directory then change to it
@@ -37,7 +38,7 @@ def driver(args):
 		print 'Given directory: %s' % input_dir
 
 		sys.exit(1)
-
+		
 	if not os.path.isdir(output_dir):
 		print 'Output directory does not exist. Please verify the path and associated permissions.'
 		print 'Given directory: %s' % input_dir
@@ -143,10 +144,10 @@ def calc_sun(wq, input_dir, output_dir):
 		t = Task(command)
 
 		# Specify input and output files
-		t.specify_input_file(script, remote_name = 'rsun.sh', cache = True)
-		t.specify_input_file(dem, remote_name =  'pit_c.tif', cache = True)
-		t.specify_output_file(sun_flat, remote_name = 'sun_%d_flat.tif' % day, cache = True)
-		t.specify_output_file(sun_total, remote_name =  'sun_%d_total.tif' % day, cache = True)
+		# t.specify_input_file(script, remote_name = 'rsun.sh', cache = True)
+		# t.specify_input_file(dem, remote_name =  'pit_c.tif', cache = True)
+		# t.specify_output_file(sun_flat, remote_name = 'sun_%d_flat.tif' % day, cache = True)
+		# t.specify_output_file(sun_total, remote_name =  'sun_%d_total.tif' % day, cache = True)
 
 		taskid = wq.submit(t)
 		total += 1
