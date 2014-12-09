@@ -267,12 +267,12 @@ if [ ! -e ${HOME}/grassdata/DEFAULT/PERMANENT/DEFAULT_WIND ] ; then
 	t-b resol: 1
 __EOF__
 
-	cp ${HOME}/grassdata/$TEMP_DIR/PERMANENT/DEFAULT_WIND ${HOME}/grassdata/$TEMP_DIR/PERMANENT/WIND
+	cp ${HOME}/grassdata/DEFAULT/PERMANENT/DEFAULT_WIND ${HOME}/grassdata/DEFAULT/PERMANENT/WIND
 fi
 
 #WIND and DEFAULT_WIND
 echo "GISDBASE: ${HOME}/grassdata" >${HOME}/.grassrc
-echo "LOCATION_NAME: $HOME/grassdata/DEFAULT" >> ${HOME}/.grassrc
+echo "LOCATION_NAME: ${GISDBASE}/DEFAULT" >> ${HOME}/.grassrc
 echo "MAPSET: PERMANENT" >> ${HOME}/.grassrc
 echo "GRASS_GUI: text" >> ${HOME}/.grassrc
 
