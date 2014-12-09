@@ -63,19 +63,19 @@ g.mremove -f "*"
 r.in.gdal input=$1 output=dem_10m
 echo "Elapsed time: $(($(date +%s)-$starttime))"
 shift 1 
-r.in.gdal input=$2 output=tmin band=$9
+r.in.gdal input=$1 output=tmin band=$9
 echo "Elapsed time: $(($(date +%s)-$starttime))"
-r.in.gdal input=$3 output=tmax band=$9
+r.in.gdal input=$2 output=tmax band=$9
 echo "Elapsed time: $(($(date +%s)-$starttime))"
-r.in.gdal input=$4 output=twi
+r.in.gdal input=$3 output=twi
 echo "Elapsed time: $(($(date +%s)-$starttime))"
-r.in.gdal input=$5 output=prcp band=$9
+r.in.gdal input=$4 output=prcp band=$9
 echo "Elapsed time: $(($(date +%s)-$starttime))"
-r.in.gdal input=$6 output=dem_1km
+r.in.gdal input=$5 output=dem_1km
 echo "Elapsed time: $(($(date +%s)-$starttime))"
-r.in.gdal input=$7 output=total_sun
+r.in.gdal input=$6 output=total_sun
 echo "Elapsed time: $(($(date +%s)-$starttime))"
-r.in.gdal input=$8 output=flat_total_sun
+r.in.gdal input=$7 output=flat_total_sun
 echo "Elapsed time: $(($(date +%s)-$starttime))"
 #set region
 g.region -s rast=dem_10m
@@ -87,7 +87,7 @@ r.mapcalc "c_w = 4185.5"
 r.mapcalc "h_bio = 22*10^6"
 echo "Elapsed time: $(($(date +%s)-$starttime))"
 #loop over days on temp
-eemt_tif=$9
+eemt_tif=$8
 r.mapcalc "S_i = total_sun/flat_total_sun"
 r.mapcalc "tmin_loc = tmin-0.00649*(dem_10m-dem_1km)"
 r.mapcalc "tmax_loc = tmax-0.00649*(dem_10m-dem_1km)"
