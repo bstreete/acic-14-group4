@@ -18,14 +18,14 @@ OUTPUT_DIR=./
 PROJ_NAME="trad_eemt"
 END_YEAR=$(($CUR_YEAR - 2))
 START_YEAR=1980
+PASSWORD="README.md"
 
 # Generate absolute path to the install directory
 SRC="$(readlink -f $0)"
 SRC="$(dirname $SRC)"
 
-echo "$SRC"
 # Process arguments
-while getopts ":i:o:p:s:e:d:" o ; do
+while getopts ":i:o:p:s:e:d:P:" o ; do
 	case "${o}" in 
 		# i = Input directory
 		i)
@@ -120,6 +120,14 @@ while getopts ":i:o:p:s:e:d:" o ; do
 
 			;;
 
+		# P - Password file 
+		P)
+			# Check the file exists 
+			if [ -e ${OPTARG} ] ; then 
+				PASSWORD=${OPTARG}
+			fi
+			;;
+
 		# Unknown entry, print usage and exit with a non-zero status
 		*)
 			echo "Usage: trad_eemt.sh [-i input directory] [-o output directory] [-p project name]"
@@ -142,7 +150,9 @@ while getopts ":i:o:p:s:e:d:" o ; do
 			echo
 
 			echo "-d 	Specifies the location of the Daymet DEM. The filename must be na_dem.tif. "
+			echo
 
+			echo "-P 	Specifies the password file to use for Work Queue. A Copy of this file needs to be accessible by each worker before it can connect to the master process. "
 
 			exit 1	
 	esac
@@ -166,7 +176,7 @@ echo "End Year   		= $END_YEAR"
 echo "Input Directory 	= $INPUT_DIR"
 echo "Output Directory 	= $OUTPUT_DIR"
 echo "Project Name 		= $PROJ_NAME"
-
+echo "Password File     = $PASSWORD"
 # If the DEM isn't specified, and isn't found in the specified directory, download it
 if [ ! -e "${INPUT_DIR}${DAYMET_DEM}na_dem.tif" ] ; then
 	echo "Daymet DEM will be downloaded from iPlant."
@@ -175,6 +185,7 @@ if [ ! -e "${INPUT_DIR}${DAYMET_DEM}na_dem.tif" ] ; then
 else
 	echo "Daymet DEM 		= ${INPUT_DIR}${DAYMET_DEM}na_dem.tif"
 fi
+
 
 echo
 read -p "Hit [Ctrl]-[C] to abort, or any key to start processing...."
@@ -210,7 +221,14 @@ if [ $? -ne 0 ] ; then
 fi
 
 # Start makeflow 
-src/eemt_queue.py $PROJ_NAME README.md $INPUT_DIR $OUTPUT_DIR $START_YEAR $END_YEAR
+${SRC}/eemt_queue.py $PROJ_NAME $PASSWORD $INPUT_DIR $OUTPUT_DIR $START_YEAR $END_YEAR
+
+if [ $? -ne 0 ] ; then
+	echo
+	echo "Failed to generate the EEMT Models. Look at the error messages for more information. Aborting."
+	echo
+	exit 1
+fi
 
 # Finished creating model. Organize data.
 echo
