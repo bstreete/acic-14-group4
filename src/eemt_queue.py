@@ -65,11 +65,12 @@ def driver(args):
 		sys.exit(1)
 
 	# Check for a password file before starting work queue
-	if not os.path.isfile(password_file):
-		print 'Invalid password file specified. Please verify the path and associated permissions.'
-		print 'Given filename: %s' % password_file
+	if password_file is not None: 
+		if not os.path.isfile(password_file):
+			print 'Invalid password file specified. Please verify the path and associated permissions.'
+			print 'Given filename: %s' % password_file
 
-		sys.exit(1)
+			sys.exit(1)
 	# Finished checking arguments
 
 	# Initiate the Queue
