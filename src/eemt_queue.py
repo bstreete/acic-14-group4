@@ -154,7 +154,7 @@ def calc_sun(wq, input_dir, output_dir):
 	
 
 	# Start iterating over the days of the year
-	for day in xrange(1,5):
+	for day in xrange(1,2):
 	
 		# Generate the names of the output files
 		sun_flat = output_dir + 'sun_%d_flat.tif' % day
@@ -195,7 +195,7 @@ def calc_model(wq, input_dir, output_dir, start, end):
 	script = 'src/reemt.sh'
 
 	# Loop here 
-	for day in range(1, 5): 
+	for day in range(1, 2): 
 
 		for year in range(int(start), int(end) + 1): 
 			# wildcard for tmin
@@ -241,12 +241,14 @@ def start_wq(wq, total):
 	with the exact same parameters. 
 	"""
 	# Check every 5 seconds for completed tasks
+	completed = 0
 	while not wq.empty(): 
 		t = wq.wait(5)
 		
 		if t:
 			if t.return_status == 0: 
-				print 'Finished task %d of %d. %2.2f%% completed.' % (t.id, total, float(float(t.id) / float(total)))
+				completed += 1
+				print 'Finished task %d of %d. %2.2f%% completed.' % (completed, total, float(float(completed) / float(total)) * 100)
 
 			else:
 
