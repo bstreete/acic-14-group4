@@ -235,39 +235,45 @@ if [ ! -e ${HOME}/grassdata ] ; then
 	mkdir ${HOME}/grassdata
 fi
 
-TEMP_DIR="tmp_${RANDOM}_$(date +%s.%N)"
-mkdir ${HOME}/grassdata/$TEMP_DIR
-mkdir ${HOME}/grassdata/$TEMP_DIR/PERMANENT
+if [ ! -e ${HOME}/grassdata/DEFAULT ] ; then
+	mkdir ${HOME}/grassdata/DEFAULT
+fi
 
+if [ ! -e ${HOME}/grassdata/DEFAULT/PERMANENT ] ; then 
+	mkdir ${HOME}/grassdata/DEFAULT/PERMANENT
+fi
+
+if [ ! -e ${HOME}/grassdata/DEFAULT/PERMANENT/DEFAULT_WIND ] ; then 
 # Set wind information
-cat > "${HOME}/grassdata/$TEMP_DIR/PERMANENT/DEFAULT_WIND" << __EOF__
+	cat > "${HOME}/grassdata/DEFAULT/PERMANENT/DEFAULT_WIND" << __EOF__
 
-proj: 99
-zone: 0
-north: 1
-south: 0
-east: 1
-west: 0
-cols: 1
-rows: 1
-e-w resol: 1
-n-s resol: 1
-top: 1.000000000000000
-bottom: 0.000000000000000
-cols3: 1
-rows3: 1
-depths: 1
-e-w resol3: 1
-n-s resol3: 1
-t-b resol: 1
-__EOF__
+	proj: 99
+	zone: 0
+	north: 1
+	south: 0
+	east: 1
+	west: 0
+	cols: 1
+	rows: 1
+	e-w resol: 1
+	n-s resol: 1
+	top: 1.000000000000000
+	bottom: 0.000000000000000
+	cols3: 1
+	rows3: 1
+	depths: 1
+	e-w resol3: 1
+	n-s resol3: 1
+	t-b resol: 1
+	__EOF__
 
-cp ${HOME}/grassdata/$TEMP_DIR/PERMANENT/DEFAULT_WIND ${HOME}/grassdata/$TEMP_DIR/PERMANENT/WIND
+	cp ${HOME}/grassdata/$TEMP_DIR/PERMANENT/DEFAULT_WIND ${HOME}/grassdata/$TEMP_DIR/PERMANENT/WIND
+fi
 
 #WIND and DEFAULT_WIND
 if [ ! -e ${HOME}/.grassrc ]; then
 	echo "GISDBASE: ${HOME}/grassdata" >${HOME}/.grassrc
-	echo "LOCATION_NAME: ${TEMP_DIR}" >> ${HOME}/.grassrc
+	echo "LOCATION_NAME: $HOME/grassdata/DEFAULT" >> ${HOME}/.grassrc
 	echo "MAPSET: PERMANENT" >> ${HOME}/.grassrc
 	echo "GRASS_GUI: text" >> ${HOME}/.grassrc
 fi
