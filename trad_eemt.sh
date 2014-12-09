@@ -228,7 +228,7 @@ if [ $? -ne 0 ] ; then
 fi
 
 # Start makeflow 
-${SRC}/eemt_queue.py $PROJ_NAME $INPUT_DIR $OUTPUT_DIR $START_YEAR $END_YEAR $PASSWORD 
+${SRC}/src/eemt_queue.py $PROJ_NAME $INPUT_DIR $OUTPUT_DIR $START_YEAR $END_YEAR $PASSWORD 
 
 if [ $? -ne 0 ] ; then
 	echo
