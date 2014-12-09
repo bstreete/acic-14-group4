@@ -210,7 +210,7 @@ def calc_model(wq, input_dir, output_dir, start, end):
 
 			output = output_dir + 'eemt_%d_%d.tif' % (year, day)
 
-			command = './reemt.sh pit_c.tif tmin.tif tmax.tif twi_c.tif prcp.tif na_dem.part.tif sun_total.tif sun_flat.tif eemt.tif'
+			command = './reemt.sh pit_c.tif tmin.tif tmax.tif twi_c.tif prcp.tif na_dem.part.tif sun_total.tif sun_flat.tif eemt.tif %d' % day
 			t = Task(command)
 
 			# List all of the necessary input files 
