@@ -16,9 +16,10 @@ NODES=1
 EMAIL="#"
 WALLTIME=1
 MASTER="-M trad_eemt"
+PASSWORD=""
 
 # Read and process the arguments
-while getopts ":eg:n:p:a:sw:" o ; do
+while getopts ":eg:n:p:a:sw:P:" o ; do
 	case "${o}" in 
 		# s = standard priority
 		s)
@@ -91,6 +92,11 @@ while getopts ":eg:n:p:a:sw:" o ; do
 			PROJECT=${OPTARG}
 			;;
 
+		# P - password file
+		P)
+			PASSWORD="--password ${OPTARG}"
+			;;
+
 		# Default Case = Unknown option
 		*) 
 			echo "Usage: submit_worker executable_name [-e] [-g group_name] [-n #] "
@@ -105,6 +111,7 @@ while getopts ":eg:n:p:a:sw:" o ; do
 			echo $'\t-a\tSpecify the IP and port of the master. Enclose them in double quotes. Cannot be used with -p.'
 			echo $'\t-s\tSets the priority to standard. Default is windfall.'
 			echo $'\t-w\tSpecify the walltime for the calculations in hours. Defaults to 1 hour.'
+			echo $'\t-P\tSpecify the password file to use for authentication between workers and the master.'
 
 			exit 1
 	esac			
@@ -139,7 +146,7 @@ cd $PWD
 source /usr/share/Modules/init/csh
 
 date
-work_queue_worker $PROJECT
+work_queue_worker $PROJECT $PASSWORD
 date
 __EOF__
 
