@@ -271,12 +271,10 @@ __EOF__
 fi
 
 #WIND and DEFAULT_WIND
-if [ ! -e ${HOME}/.grassrc ]; then
-	echo "GISDBASE: ${HOME}/grassdata" >${HOME}/.grassrc
-	echo "LOCATION_NAME: $HOME/grassdata/DEFAULT" >> ${HOME}/.grassrc
-	echo "MAPSET: PERMANENT" >> ${HOME}/.grassrc
-	echo "GRASS_GUI: text" >> ${HOME}/.grassrc
-fi
+echo "GISDBASE: ${HOME}/grassdata" >${HOME}/.grassrc
+echo "LOCATION_NAME: $HOME/grassdata/DEFAULT" >> ${HOME}/.grassrc
+echo "MAPSET: PERMANENT" >> ${HOME}/.grassrc
+echo "GRASS_GUI: text" >> ${HOME}/.grassrc
 
 # #set up envvar for UAHPC only
 # export GISBASE=/gsfs1/xdisk/nirav/grass/grass-6.4.4
