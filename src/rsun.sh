@@ -30,7 +30,6 @@ echo "e-w resol3: 1" >> DEFAULT_WIND
 echo "n-s resol3: 1" >> DEFAULT_WIND
 echo "t-b resol: 1" >> DEFAULT_WIND
 cp DEFAULT_WIND WIND
-cd $START_DIR
 #WIND and DEFAULT_WIND
 if [ -e ${HOME}/.grassrc ]; then
 rm -f ${HOME}/.grassrc
@@ -39,6 +38,9 @@ echo "GISDBASE: ${HOME}/grassdata" >${HOME}/.grassrc
 echo "LOCATION_NAME: southern_sierra" >> ${HOME}/.grassrc
 echo "MAPSET: PERMANENT" >> ${HOME}/.grassrc
 echo "GRASS_GUI: text" >> ${HOME}/.grassrc
+
+cd $START_DIR
+
 #Parameter setting
 stepsize=0.05
 interval=1
