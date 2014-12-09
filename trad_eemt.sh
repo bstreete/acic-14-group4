@@ -181,7 +181,7 @@ echo "Project Name 		= $PROJ_NAME"
 if [ -z $PASSWORD ] ; then 
 	echo "No password file specified. "
 else 
-	echo "Password File     = $PASSWORD"
+	echo "Password File 	= $PASSWORD"
 fi
 
 # If the DEM isn't specified, and isn't found in the specified directory, download it
