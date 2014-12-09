@@ -259,7 +259,9 @@ def start_wq(wq, total):
 				wq.submit(t)
 				total += 1 
 
-	print 'Finished generating the EEMT model. '
+	print 'Finished generating the EEMT model. Shutting down workers.'
+	# Shutdown all currently running workers
+	wq.shutdown_workers(0)
 # End start_wq(wq)
 
 if __name__ == '__main__':
