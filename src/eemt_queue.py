@@ -206,7 +206,7 @@ def calc_model(wq, input_dir, output_dir, start, end):
 			prcp = glob.glob('daymet/*/*_%d_prcp.tif' % year)
 
 			sun_flat = output_dir + 'sun_%d_flat.tif' % day
-			sun_total = output_dir + 'sun_%d_total' % day
+			sun_total = output_dir + 'sun_%d_total.tif' % day
 
 			output = output_dir + 'eemt_%d_%d.tif' % (year, day)
 
