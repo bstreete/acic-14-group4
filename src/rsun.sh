@@ -5,9 +5,7 @@
 # fi
 START_DIR=${PWD}
 TEMP_DIR='tmp_${RANDOM}_$(date +%s.%N)'
-cd ${HOME}
-mkdir grassdata
-cd grassdata
+cd ${HOME}/grassdata
 mkdir $TEMP_DIR
 cd $TEMP_DIR
 mkdir PERMANENT
