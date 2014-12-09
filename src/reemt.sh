@@ -50,9 +50,9 @@ interval=1
 starttime=$(date +%s)
 day=$7
 #set up envvar for UAHPC only
-export GISBASE=/usr/lib/grass64:/gsfs1/xdisk/nirav/grass/grass-6.4.4
+export GISBASE=/gsfs1/xdisk/nirav/grass/grass-6.4.4
 export PATH="$GISBASE/bin:$GISBASE/scripts:$PATH"
-export LD_LIBRARY_PATH="$GISBASE/lib:/usr/lib:/gsfs1/xdisk/nirav/lib"
+export LD_LIBRARY_PATH="$GISBASE/lib:/usr/lib:/gsfs1/xdisk/nirav/lib:$LD_LIBRARY_PATH"
 export GRASS_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
 export GISRC=$HOME/.grassrc
 #update project info
