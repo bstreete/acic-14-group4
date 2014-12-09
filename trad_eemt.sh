@@ -18,7 +18,7 @@ OUTPUT_DIR=./
 PROJ_NAME="trad_eemt"
 END_YEAR=$(($CUR_YEAR - 2))
 START_YEAR=1980
-PASSWORD="README.md"
+PASSWORD=""
 
 # Generate absolute path to the install directory
 SRC="$(readlink -f $0)"
@@ -152,7 +152,7 @@ while getopts ":i:o:p:s:e:d:P:" o ; do
 			echo "-d 	Specifies the location of the Daymet DEM. The filename must be na_dem.tif. "
 			echo
 
-			echo "-P 	Specifies the password file to use for Work Queue. A Copy of this file needs to be accessible by each worker before it can connect to the master process. "
+			echo "-P 	Specifies the password file to use for Work Queue. A Copy of this file needs to be accessible by each worker before it can connect to the master process. Optional. "
 
 			exit 1	
 	esac
@@ -176,7 +176,14 @@ echo "End Year   		= $END_YEAR"
 echo "Input Directory 	= $INPUT_DIR"
 echo "Output Directory 	= $OUTPUT_DIR"
 echo "Project Name 		= $PROJ_NAME"
-echo "Password File     = $PASSWORD"
+
+# If no password is specified, then tell the user
+if [ -z $PASSWORD ] ; then 
+	echo "No password file specified. "
+else 
+	echo "Password File     = $PASSWORD"
+fi
+
 # If the DEM isn't specified, and isn't found in the specified directory, download it
 if [ ! -e "${INPUT_DIR}${DAYMET_DEM}na_dem.tif" ] ; then
 	echo "Daymet DEM will be downloaded from iPlant."
@@ -221,7 +228,7 @@ if [ $? -ne 0 ] ; then
 fi
 
 # Start makeflow 
-${SRC}/eemt_queue.py $PROJ_NAME $PASSWORD $INPUT_DIR $OUTPUT_DIR $START_YEAR $END_YEAR
+${SRC}/eemt_queue.py $PROJ_NAME $INPUT_DIR $OUTPUT_DIR $START_YEAR $END_YEAR $PASSWORD 
 
 if [ $? -ne 0 ] ; then
 	echo
