@@ -3,6 +3,8 @@
 if [ -d ${HOME}/grassdata ]; then
 rm -rf "${HOME}/grassdata"
 fi
+# Save the original directory 
+START_DIR=${PWD}
 cd ${HOME}
 mkdir grassdata
 cd ${HOME}/grassdata
@@ -38,15 +40,19 @@ echo "GISDBASE: ${HOME}/grassdata" >${HOME}/.grassrc
 echo "LOCATION_NAME: southern_sierra" >> ${HOME}/.grassrc
 echo "MAPSET: PERMANENT" >> ${HOME}/.grassrc
 echo "GRASS_GUI: text" >> ${HOME}/.grassrc
+
+# Return to the original directory
+cd $START_DIR
+
 #Parameter setting
 stepsize=0.5
 interval=1
 starttime=$(date +%s)
 day=$7
 #set up envvar for UAHPC only
-export GISBASE=/gsfs1/xdisk/nirav/grass/grass-6.4.4
+export GISBASE=/usr/lib/grass64:/gsfs1/xdisk/nirav/grass/grass-6.4.4
 export PATH="$GISBASE/bin:$GISBASE/scripts:$PATH"
-export LD_LIBRARY_PATH="/gsfs1/xdisk/nirav/grass/grass-6.4.4/lib:/gsfs1/xdisk/nirav/grass-6.4.4/ext/lib:/gsfs1/xdisk/nirav/lib"
+export LD_LIBRARY_PATH="$GISBASE/lib:/usr/lib:/gsfs1/xdisk/nirav/lib"
 export GRASS_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
 export GISRC=$HOME/.grassrc
 #update project info
