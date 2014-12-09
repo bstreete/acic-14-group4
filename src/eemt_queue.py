@@ -21,16 +21,30 @@ and uses the appropriate relative paths to the individual scripts.
 def driver(args):
 
 	# Initial Argument Verification
-	if len(args) != 7: 
-		print 'Usage: %s project_name password_file input_dir output_dir start_year end_year' % args[0]
+	if len(args) != 6 || len(args) != 7: 
+		print 'Usage: %s project_name input_dir output_dir start_year end_year [password_file]' % args[0]
 		print 'All fields are required in the specified order. Aborting.'
 		sys.exit(1)
 
-	# Save the directories
-	input_dir = args[3]
-	output_dir = args[4]
+
+	# Setup the variables
+
 	current_dir = os.getcwd()
-	password_file = os.path.join(os.getcwd(), args[2])
+	project_name = args[1]
+	input_dir = args[2]
+	output_dir = args[3]
+	start_year = args[4]
+	end_year = args[5]
+
+	if len(args) == 7:
+		password_file = os.path.join(os.getcwd(), args[6])
+		
+
+	else:
+		password_file = None
+
+
+
 
 	# Check the input directory then change to it
 	if not os.path.isdir(input_dir):	
@@ -54,12 +68,12 @@ def driver(args):
 	# Finished checking arguments
 
 	# Initiate the Queue
-	wq = init_wq(args[1], password_file)
+	wq = init_wq(project_name, password_file)
 
 	# Create the tasks
-	wq, total = create_tasks(wq, input_dir, output_dir, args[5], args[6])
+	wq, total = create_tasks(wq, input_dir, output_dir, start_year, end_year)
 
-	print 'Workqueue is listening for project %s.\n' % args[1]
+	print 'Workqueue is listening for project %s.\n' % project_name
 	# Wait for Completion
 	start_wq(wq, total)
 
@@ -79,8 +93,10 @@ def init_wq(name, password_file):
 		try:
 			wq = WorkQueue(port)
 			wq.specify_name(name)
-			# wq.specify_password_file(password_file)
-			cctools_debug_flags_set('all')
+
+			if password_file is not None: 
+				wq.specify_password_file(password_file)
+
 			print 'Started Work Queue process with project name %s\n' % name
 			break
 		# Catch the errors
@@ -247,6 +263,8 @@ def start_wq(wq, total):
 				print 'Task failed: \n\tLogs: \n'
 				print t.output
 				print 'Task %d failed. Resubmitting.' % t.id
+
+				if 
 				wq.submit(t)
 				total += 1 
 
