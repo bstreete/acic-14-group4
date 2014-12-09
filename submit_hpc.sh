@@ -146,7 +146,8 @@ cd $PWD
 source /usr/share/Modules/init/csh
 
 date
-work_queue_worker $PROJECT $PASSWORD
+echo "work_queue_worker ${PASSWORD} ${PROJECT}"
+work_queue_worker $PASSWORD $PROJECT 
 date
 __EOF__
 
