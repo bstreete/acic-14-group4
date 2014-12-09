@@ -15,7 +15,7 @@ PRIORITY="windfall"
 NODES=1
 EMAIL="#"
 WALLTIME=1
-MASTER="-M trad_eemt"
+PROJECT="-M trad_eemt"
 PASSWORD=""
 
 # Read and process the arguments
