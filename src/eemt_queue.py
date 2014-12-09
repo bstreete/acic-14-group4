@@ -170,7 +170,7 @@ def calc_sun(wq, input_dir, output_dir):
 		t.specify_input_file(dem, 'pit_c.tif', cache = True)
 		t.specify_output_file(sun_flat, 'sun_%d_flat.tif' % day, cache = True)
 		t.specify_output_file(sun_total, 'sun_%d_total.tif' % day, cache = True)
-
+		t.specify_input_file(os.path.join(os.path.expanduser('~'), '.grassdata'), '.grassdata')
 		taskid = wq.submit(t)
 		total += 1
 	# End loop
@@ -223,6 +223,7 @@ def calc_model(wq, input_dir, output_dir, start, end):
 			t.specify_input_file(prcp[0], 'prcp.tif')
 			t.specify_input_file(sun_flat, 'sun_flat.tif')
 			t.specify_input_file(sun_total, 'sun_total.tif')
+			t.specify_input_file(os.path.join(os.path.expanduser('~'), '.grassdata'), '.grassdata')
 			t.specify_output_file(output, 'eemt.tif')
 
 			taskid = wq.submit(t)
@@ -257,7 +258,6 @@ def start_wq(wq, total):
 				print 'Task %d failed. Resubmitting.' % t.id
 
 				wq.submit(t)
-				total += 1 
 
 	print 'Finished generating the EEMT model. Shutting down workers.'
 	# Shutdown all currently running workers
