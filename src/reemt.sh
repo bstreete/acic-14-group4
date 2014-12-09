@@ -5,10 +5,10 @@
 # fi
 # Save the original directory 
 START_DIR=${PWD}
-TEMP_DIR='tmp_${RANDOM}_$((date +%s.%N))'
+TEMP_DIR='tmp_${RANDOM}_$(date +%s.%N)'
 cd ${HOME}
 mkdir grassdata
-cd /grassdata
+cd grassdata
 mkdir $TEMP_DIR
 cd $TEMP_DIR
 mkdir PERMANENT
