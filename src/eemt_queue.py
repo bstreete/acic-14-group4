@@ -97,11 +97,11 @@ def init_wq(name, password_file):
 			if password_file is not None: 
 				wq.specify_password_file(password_file)
 
-			print 'Started Work Queue process with project name %s\n' % name
+			print 'Started Work Queue process with project name %s.\n' % name
 			break
 		# Catch the errors
 		except:
-			print 'Failed to initialize work queue process on port %d. Retrying.' % port
+			# print 'Failed to initialize work queue process on port %d. Retrying.' % port
 			port += 1
 
 		if port > 10000:
