@@ -29,7 +29,7 @@ def driver(args):
 	# Save the directories
 	input_dir = args[3]
 	output_dir = args[4]
-	current_dir = os.path.getcwd()
+	current_dir = os.getcwd()
 	password_file = os.path.join(os.getcwd(), args[2])
 
 	# Check the input directory then change to it
@@ -38,7 +38,7 @@ def driver(args):
 		print 'Given directory: %s' % input_dir
 
 		sys.exit(1)
-		
+
 	if not os.path.isdir(output_dir):
 		print 'Output directory does not exist. Please verify the path and associated permissions.'
 		print 'Given directory: %s' % input_dir
