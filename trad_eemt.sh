@@ -273,7 +273,7 @@ cd $START_DIR
 #set up envvar for UAHPC only
 export GISBASE=/gsfs1/xdisk/nirav/grass/grass-6.4.4
 export PATH="$GISBASE/bin:$GISBASE/scripts:$PATH"
-export LD_LIBRARY_PATH="/gsfs1/xdisk/nirav/grass/grass-6.4.4/lib:/gsfs1/xdisk/nirav/grass-6.4.4/ext/lib:/gsfs1/xdisk/nirav/lib"
+export LD_LIBRARY_PATH="/gsfs1/xdisk/nirav/grass/grass-6.4.4/lib:/gsfs1/xdisk/nirav/grass-6.4.4/ext/lib:/gsfs1/xdisk/nirav/lib:${LD_LIBRARY_PATH}"
 # export GISBASE="/usr/lib/grass64"
 # export PATH="/usr/lib/grass64/bin:/usr/lib/grass64/scripts:$PATH"
 # export LD_LIBRARY_PATH="/usr/lib/grass64/lib"
