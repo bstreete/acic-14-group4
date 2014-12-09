@@ -49,9 +49,12 @@ day=$2
 outputts=$3
 outputfts=$4
 #set up envvar for UAHPC only
-export GISBASE="/usr/lib/grass64"
-export PATH="/usr/lib/grass64/bin:/usr/lib/grass64/scripts:$PATH"
-export LD_LIBRARY_PATH="/usr/lib/grass64/lib"
+export GISBASE=/gsfs1/xdisk/nirav/grass/grass-6.4.4
+export PATH="$GISBASE/bin:$GISBASE/scripts:$PATH"
+export LD_LIBRARY_PATH="/gsfs1/xdisk/nirav/grass/grass-6.4.4/lib:/gsfs1/xdisk/nirav/grass-6.4.4/ext/lib:/gsfs1/xdisk/nirav/lib"
+# export GISBASE="/usr/lib/grass64"
+# export PATH="/usr/lib/grass64/bin:/usr/lib/grass64/scripts:$PATH"
+# export LD_LIBRARY_PATH="/usr/lib/grass64/lib"
 export GRASS_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
 export GISRC="$HOME/.grassrc"
 #update project info
