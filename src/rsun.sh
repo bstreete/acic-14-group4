@@ -3,6 +3,7 @@
 if [ -d ${HOME}/grassdata ]; then
 rm -rf "${HOME}/grassdata"
 fi
+START_DIR=${PWD}
 cd ${HOME}
 mkdir grassdata
 cd ${HOME}/grassdata
@@ -29,7 +30,7 @@ echo "e-w resol3: 1" >> DEFAULT_WIND
 echo "n-s resol3: 1" >> DEFAULT_WIND
 echo "t-b resol: 1" >> DEFAULT_WIND
 cp DEFAULT_WIND WIND
-cd
+cd $START_DIR
 #WIND and DEFAULT_WIND
 if [ -e ${HOME}/.grassrc ]; then
 rm -f ${HOME}/.grassrc
@@ -46,11 +47,11 @@ day=$2
 outputts=$3
 outputfts=$4
 #set up envvar for UAHPC only
-export GISBASE=/gsfs1/xdisk/nirav/grass/grass-6.4.4
-export PATH="$GISBASE/bin:$GISBASE/scripts:$PATH"
-export LD_LIBRARY_PATH="/gsfs1/xdisk/nirav/grass/grass-6.4.4/lib:/gsfs1/xdisk/nirav/grass-6.4.4/ext/lib:/gsfs1/xdisk/nirav/lib"
+export GISBASE="/usr/lib/grass64"
+export PATH="/usr/lib/grass64/bin:/usr/lib/grass64/scripts:$PATH"
+export LD_LIBRARY_PATH="/usr/lib/grass64/lib"
 export GRASS_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
-export GISRC=$HOME/.grassrc
+export GISRC="$HOME/.grassrc"
 #update project info
 g.proj -c proj4="+proj=lcc +lat_1=25 +lat_2=60 +lat_0=42.5 +lon_0=-100 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"
 #loop head
