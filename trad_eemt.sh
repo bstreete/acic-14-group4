@@ -265,7 +265,7 @@ if [ ! -e ${HOME}/grassdata/DEFAULT/PERMANENT/DEFAULT_WIND ] ; then
 	e-w resol3: 1
 	n-s resol3: 1
 	t-b resol: 1
-	__EOF__
+__EOF__
 
 	cp ${HOME}/grassdata/$TEMP_DIR/PERMANENT/DEFAULT_WIND ${HOME}/grassdata/$TEMP_DIR/PERMANENT/WIND
 fi
