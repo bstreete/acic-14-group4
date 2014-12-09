@@ -272,12 +272,12 @@ if [ ! -e ${HOME}/.grassrc ]; then
 	echo "GRASS_GUI: text" >> ${HOME}/.grassrc
 fi
 
-#set up envvar for UAHPC only
-export GISBASE=/gsfs1/xdisk/nirav/grass/grass-6.4.4
-export PATH="$GISBASE/bin:$GISBASE/scripts:$PATH"
-export LD_LIBRARY_PATH="/gsfs1/xdisk/nirav/grass/grass-6.4.4/lib:/gsfs1/xdisk/nirav/grass-6.4.4/ext/lib:/gsfs1/xdisk/nirav/lib:${LD_LIBRARY_PATH}"
-export GRASS_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
-export GISRC="$HOME/.grassrc"
+# #set up envvar for UAHPC only
+# export GISBASE=/gsfs1/xdisk/nirav/grass/grass-6.4.4
+# export PATH="$GISBASE/bin:$GISBASE/scripts:$PATH"
+# export LD_LIBRARY_PATH="/gsfs1/xdisk/nirav/grass/grass-6.4.4/lib:/gsfs1/xdisk/nirav/grass-6.4.4/ext/lib:/gsfs1/xdisk/nirav/lib:${LD_LIBRARY_PATH}"
+# export GRASS_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+# export GISRC="$HOME/.grassrc"
 
 echo "Starting task generation....."
 
