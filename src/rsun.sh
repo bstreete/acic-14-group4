@@ -4,11 +4,12 @@ if [ -d ${HOME}/grassdata ]; then
 rm -rf "${HOME}/grassdata"
 fi
 START_DIR=${PWD}
+TEMP_DIR='tmp_${RANDOM}_$((date))'
 cd ${HOME}
 mkdir grassdata
-cd ${HOME}/grassdata
-mkdir southern_sierra
-cd southern_sierra
+cd /grassdata
+mkdir $TEMP_DIR
+cd $TEMP_DIR
 mkdir PERMANENT
 cd PERMANENT
 echo "proj: 99" > DEFAULT_WIND
@@ -35,7 +36,7 @@ if [ -e ${HOME}/.grassrc ]; then
 rm -f ${HOME}/.grassrc
 fi
 echo "GISDBASE: ${HOME}/grassdata" >${HOME}/.grassrc
-echo "LOCATION_NAME: southern_sierra" >> ${HOME}/.grassrc
+echo "LOCATION_NAME: ${TEMP_DIR}" >> ${HOME}/.grassrc
 echo "MAPSET: PERMANENT" >> ${HOME}/.grassrc
 echo "GRASS_GUI: text" >> ${HOME}/.grassrc
 
