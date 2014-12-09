@@ -227,59 +227,6 @@ if [ $? -ne 0 ] ; then
 	exit 1
 fi
 
-# Setup Grass configurations
-
-START_DIR=${PWD}
-TEMP_DIR="tmp_${RANDOM}_$(date +%s.%N)"
-
-if [ ! -e ${HOME}/grassdata ] ; then
-	mkdir ${HOME}/grassdata
-fi
-
-cd ${HOME}/grassdata
-mkdir $TEMP_DIR
-cd $TEMP_DIR
-mkdir PERMANENT
-cd PERMANENT
-echo "proj: 99" > DEFAULT_WIND
-echo "zone: 0" >> DEFAULT_WIND
-echo "north: 1" >> DEFAULT_WIND
-echo "south: 0" >> DEFAULT_WIND
-echo "east: 1" >> DEFAULT_WIND
-echo "west: 0" >> DEFAULT_WIND
-echo "cols: 1" >> DEFAULT_WIND
-echo "rows: 1" >> DEFAULT_WIND
-echo "e-w resol: 1" >> DEFAULT_WIND
-echo "n-s resol: 1" >> DEFAULT_WIND
-echo "top: 1.000000000000000" >> DEFAULT_WIND
-echo "bottom: 0.000000000000000" >> DEFAULT_WIND
-echo "cols3: 1" >> DEFAULT_WIND
-echo "rows3: 1" >> DEFAULT_WIND
-echo "depths: 1" >> DEFAULT_WIND
-echo "e-w resol3: 1" >> DEFAULT_WIND
-echo "n-s resol3: 1" >> DEFAULT_WIND
-echo "t-b resol: 1" >> DEFAULT_WIND
-cp DEFAULT_WIND WIND
-
-#WIND and DEFAULT_WIND
-if [ ! -e ${HOME}/.grassrc ]; then
-	echo "GISDBASE: ${HOME}/grassdata" >${HOME}/.grassrc
-	echo "LOCATION_NAME: ${TEMP_DIR}" >> ${HOME}/.grassrc
-	echo "MAPSET: PERMANENT" >> ${HOME}/.grassrc
-	echo "GRASS_GUI: text" >> ${HOME}/.grassrc
-fi
-cd $START_DIR
-
-#set up envvar for UAHPC only
-export GISBASE=/gsfs1/xdisk/nirav/grass/grass-6.4.4
-export PATH="$GISBASE/bin:$GISBASE/scripts:$PATH"
-export LD_LIBRARY_PATH="/gsfs1/xdisk/nirav/grass/grass-6.4.4/lib:/gsfs1/xdisk/nirav/grass-6.4.4/ext/lib:/gsfs1/xdisk/nirav/lib:${LD_LIBRARY_PATH}"
-# export GISBASE="/usr/lib/grass64"
-# export PATH="/usr/lib/grass64/bin:/usr/lib/grass64/scripts:$PATH"
-# export LD_LIBRARY_PATH="/usr/lib/grass64/lib"
-export GRASS_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
-export GISRC="$HOME/.grassrc"
-
 # Start makeflow 
 ${SRC}/src/eemt_queue.py $PROJ_NAME $INPUT_DIR $OUTPUT_DIR $START_YEAR $END_YEAR $PASSWORD 
 
