@@ -59,8 +59,13 @@ echo "GRASS_GUI: text" >> ${HOME}/.grassrc_$9
 
 g.proj -c proj4="+proj=lcc +lat_1=25 +lat_2=60 +lat_0=42.5 +lon_0=-100 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"
 g.mremove -f "*"
+
 r.in.gdal input=$1 output=dem_10m
 echo "Elapsed time: $(($(date +%s)-$starttime))"
+
+#set region
+g.region -s rast=dem_10m
+
 r.in.gdal input=$1 output=tmin band=$9
 echo "Elapsed time: $(($(date +%s)-$starttime))"
 r.in.gdal input=$2 output=tmax band=$9
@@ -75,9 +80,8 @@ r.in.gdal input=$6 output=total_sun
 echo "Elapsed time: $(($(date +%s)-$starttime))"
 r.in.gdal input=$7 output=flat_total_sun
 echo "Elapsed time: $(($(date +%s)-$starttime))"
+
 shift 1
-#set region
-g.region -s rast=dem_10m
 #r.sun elevin=dem_10m aspin=zeros slopein=zeros day="1" step="0.05" dist="1" glob_rad=flat_total_sun
 #r.mapcalc "S_i=total_sun/flat_total_sun"
 r.mapcalc "a_i = twi/((max(twi)+min(twi))/2)"
