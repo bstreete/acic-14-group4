@@ -39,7 +39,7 @@ if [ ! -e ${HOME}/grassdata/tmp_$2/PERMANENT/DEFAULT_WIND ] ; then
 	t-b resol: 1
 __EOF__
 
-	cp ${HOME}/grassdata/DEFAULT/PERMANENT/DEFAULT_WIND ${HOME}/grassdata/DEFAULT/PERMANENT/WIND
+	cp ${HOME}/grassdata/tmp_$2/PERMANENT/DEFAULT_WIND ${HOME}/grassdata/tmp_$2/PERMANENT/WIND
 fi
  
 echo "GISDBASE: ${HOME}/grassdata" >${HOME}/.grassrc_$2
