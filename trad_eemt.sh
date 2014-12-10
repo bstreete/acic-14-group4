@@ -228,8 +228,9 @@ if [ $? -ne 0 ] ; then
 fi
 
 # Set Grass Location: 
-
+echo
 echo "Initializing Grass Location information...."
+echo
 
 if [ ! -e ${HOME}/grassdata ] ; then
 	mkdir ${HOME}/grassdata
@@ -270,19 +271,14 @@ __EOF__
 	cp ${HOME}/grassdata/DEFAULT/PERMANENT/DEFAULT_WIND ${HOME}/grassdata/DEFAULT/PERMANENT/WIND
 fi
 
-#WIND and DEFAULT_WIND
-echo "GISDBASE: ${HOME}/grassdata" >${HOME}/.grassrc
-echo "LOCATION_NAME: ${GISDBASE}/DEFAULT" >> ${HOME}/.grassrc
-echo "MAPSET: PERMANENT" >> ${HOME}/.grassrc
-echo "GRASS_GUI: text" >> ${HOME}/.grassrc
+if [ ! -e ${HOME}/.grassrc ] ; then 
+	echo "GISDBASE: ${HOME}/grassdata" >${HOME}/.grassrc
+	echo "LOCATION_NAME: DEFAULT" >> ${HOME}/.grassrc
+	echo "MAPSET: PERMANENT" >> ${HOME}/.grassrc
+	echo "GRASS_GUI: text" >> ${HOME}/.grassrc
+fi 
 
-# #set up envvar for UAHPC only
-# export GISBASE=/gsfs1/xdisk/nirav/grass/grass-6.4.4
-# export PATH="$GISBASE/bin:$GISBASE/scripts:$PATH"
-# export LD_LIBRARY_PATH="/gsfs1/xdisk/nirav/grass/grass-6.4.4/lib:/gsfs1/xdisk/nirav/grass-6.4.4/ext/lib:/gsfs1/xdisk/nirav/lib:${LD_LIBRARY_PATH}"
-# export GRASS_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
-# export GISRC="$HOME/.grassrc"
-
+echo
 echo "Starting task generation....."
 
 # Start makeflow 
