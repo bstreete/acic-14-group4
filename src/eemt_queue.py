@@ -126,15 +126,18 @@ def create_tasks(wq, input_dir, output_dir, start, end):
 	from the upscaled inputs.
 	"""
 
-	print 'Preparing to generate solar irradiation model....\n'
+	print 'Preparing tasks to generate solar irradiation and insolation....\n'
 	# Generate the R.Sun calculations first
 	wq, sun_total = calc_sun(wq, input_dir, output_dir)
 
-	print 'Preparing to upscale weather data....\n'
+	print 'Preparing tasks for upscaling weather data....\n'
 	# Generate the Upscaled weather data/EEMT model
 	wq, model_total = calc_model(wq, input_dir, output_dir, start, end) 
 
-	total = sun_total + model_total
+	print 'Preparing tasks for merging yearly results....\n'
+	wq, year_total = merge_years(wq, input_dir, output_dir, start, end)
+
+	total = sun_total + model_total + year_total
 
 	print 'Submitted %d individual jobs. Processing.\n' % total
 
@@ -230,8 +233,42 @@ def calc_model(wq, input_dir, output_dir, start, end):
 		# End yearly loop
 	# End daily loop
 
+	# Start of yearly sets
+
 	return wq, total
 # End calc_model(wq)
+
+def merge_years(wq, input_dir, output_dir, start, end): 
+	"""
+	Merges all of the results from the same year into a single file named trad_year.tif.
+	Each band represents a different day's EEMT model. 
+	"""
+
+	total = 0
+
+	# For each year: 
+	for year in range(int(start), int(end) + 1): 
+
+		command = ['gdal_merge', '-separate', '-o', output_dir + 'trad_%d.tif' % year]
+
+		# For every day that year 
+		for day in range(1, 366): 
+			command.append('eemt_%d_%d.tif' % (year, day))
+
+		t = Task(' '.join(command))
+
+		# Specify the executable and output files
+		t.specify_input_file('gdal_merge', 'gdal_merge')
+		t.specify_output_file(output_dir + 'trad_%d.tif' % year, 'trad_%d.tif' % year)
+
+		for day in range(1, 366): 
+			filename = 'eemt_%d_%d.tif' % (year, day)
+			t.specify_input_file(input_dir + filename, filename)
+
+		taskid = wq.submit(t)
+		total += 1
+
+	return wq, total
 
 def start_wq(wq, total): 
 	"""
