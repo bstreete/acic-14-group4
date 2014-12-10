@@ -11,7 +11,7 @@ day=$7
 #input
 
 # Setup temporary config files
-export GISBASE=${HOME}/.grassrc_$9
+export GISRC=${HOME}/.grassrc_$9
 
 if [ ! -e ${HOME}/grassdata ] ; then
 	mkdir ${HOME}/grassdata
