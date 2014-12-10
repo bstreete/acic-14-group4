@@ -171,7 +171,6 @@ def calc_sun(wq, input_dir, output_dir):
 		t.specify_input_file(dem, 'pit_c.tif', cache = True)
 		t.specify_output_file(sun_flat, 'sun_%d_flat.tif' % day, cache = True)
 		t.specify_output_file(sun_total, 'sun_%d_total.tif' % day, cache = True)
-		t.specify_directory('~/grassdata/', '~/grassdata/', WORK_QUEUE_INPUT)
 		taskid = wq.submit(t)
 		total += 1
 	# End loop
@@ -211,7 +210,7 @@ def calc_model(wq, input_dir, output_dir, start, end):
 
 			output = output_dir + 'eemt_%d_%d.tif' % (year, day)
 
-			command = './reemt.sh pit_c.tif tmin.tif tmax.tif twi_c.tif prcp.tif na_dem.part.tif sun_total.tif sun_flat.tif eemt.tif %d' % day
+			command = './reemt.sh pit_c.tif tmin.tif tmax.tif twi_c.tif prcp.tif na_dem.part.tif sun_total.tif sun_flat.tif %d eemt.tif' % day
 			t = Task(command)
 
 			# List all of the necessary input files 
@@ -225,7 +224,6 @@ def calc_model(wq, input_dir, output_dir, start, end):
 			t.specify_input_file(sun_flat, 'sun_flat.tif')
 			t.specify_input_file(sun_total, 'sun_total.tif')
 			t.specify_output_file(output, 'eemt.tif')
-			t.specify_directory('~/grassdata/', '~/grassdata/', WORK_QUEUE_INPUT)
 			taskid = wq.submit(t)
 
 			total += 1

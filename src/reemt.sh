@@ -11,10 +11,57 @@ g.proj -c proj4="+proj=lcc +lat_1=25 +lat_2=60 +lat_0=42.5 +lon_0=-100 +x_0=0 +y
 #loop head
 #input
 
+# Setup temporary config files
+export GISBASE=${HOME}/.grassrc_$9
+
+if [ ! -e ${HOME}/grassdata ] ; then
+	mkdir ${HOME}/grassdata
+fi
+
+if [ ! -e ${HOME}/grassdata/tmp_$9 ] ; then
+	mkdir ${HOME}/grassdata/tmp_$9
+fi
+
+if [ ! -e ${HOME}/grassdata/tmp_$9/PERMANENT ] ; then 
+	mkdir ${HOME}/grassdata/tmp_$9/PERMANENT
+fi
+
+if [ ! -e ${HOME}/grassdata/tmp_$9/PERMANENT/DEFAULT_WIND ] ; then 
+# Set wind information
+	cat > "${HOME}/grassdata/tmp_$9/PERMANENT/DEFAULT_WIND" << __EOF__
+
+	proj: 99
+	zone: 0
+	north: 1
+	south: 0
+	east: 1
+	west: 0
+	cols: 1
+	rows: 1
+	e-w resol: 1
+	n-s resol: 1
+	top: 1.000000000000000
+	bottom: 0.000000000000000
+	cols3: 1
+	rows3: 1
+	depths: 1
+	e-w resol3: 1
+	n-s resol3: 1
+	t-b resol: 1
+__EOF__
+
+	cp ${HOME}/grassdata/tmp_$9/PERMANENT/DEFAULT_WIND ${HOME}/grassdata/tmp_$9/PERMANENT/WIND
+fi
+
+echo "GISDBASE: ${HOME}/grassdata" >${HOME}/.grassrc_$9
+echo "LOCATION_NAME: tmp_$9" >> ${HOME}/.grassrc_$9
+echo "MAPSET: PERMANENT" >> ${HOME}/.grassrc_$9
+echo "GRASS_GUI: text" >> ${HOME}/.grassrc_$9
+
+
 g.mremove -f "*"
 r.in.gdal input=$1 output=dem_10m
 echo "Elapsed time: $(($(date +%s)-$starttime))"
-shift 1 
 r.in.gdal input=$1 output=tmin band=$9
 echo "Elapsed time: $(($(date +%s)-$starttime))"
 r.in.gdal input=$2 output=tmax band=$9
@@ -29,6 +76,7 @@ r.in.gdal input=$6 output=total_sun
 echo "Elapsed time: $(($(date +%s)-$starttime))"
 r.in.gdal input=$7 output=flat_total_sun
 echo "Elapsed time: $(($(date +%s)-$starttime))"
+shift 1
 #set region
 g.region -s rast=dem_10m
 #r.sun elevin=dem_10m aspin=zeros slopein=zeros day="1" step="0.05" dist="1" glob_rad=flat_total_sun
@@ -39,7 +87,7 @@ r.mapcalc "c_w = 4185.5"
 r.mapcalc "h_bio = 22*10^6"
 echo "Elapsed time: $(($(date +%s)-$starttime))"
 #loop over days on temp
-eemt_tif=$8
+eemt_tif=$9
 r.mapcalc "S_i = total_sun/flat_total_sun"
 r.mapcalc "tmin_loc = tmin-0.00649*(dem_10m-dem_1km)"
 r.mapcalc "tmax_loc = tmax-0.00649*(dem_10m-dem_1km)"
@@ -65,3 +113,8 @@ r.mapcalc "EEMT = F*c_w*DT+NPP*h_bio"
 r.out.gdal -c createopt="TFW=YES,COMPRESS=LZW" input=EEMT output=$eemt_tif
 echo "Elapsed time: $(($(date +%s)-$starttime))"
 g.mremove -f "*"
+
+# Use $8 instead $9 because of shift @ Line 79
+echo "Cleaning up temporary files...."
+rm -rf ${HOME}/grassdata/tmp_$8
+rm ${HOME}/.grassrc_$8
