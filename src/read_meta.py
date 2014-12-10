@@ -220,7 +220,6 @@ def read_meta():
 			line = line.split()
 			proj_info['region'] = line[-2]
 
-	print proj_info
 	# Convert the DEMs to Daymet's projection
 	print 'Converting OpenTopography DEMs to Daymet\'s projection.'
 	convert_opentopo(proj_info)
