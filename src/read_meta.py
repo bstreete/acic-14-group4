@@ -7,7 +7,9 @@ import decimal
 import ConfigParser
 from tiffparser import TiffParser
 import math
+import string
 import tarfile
+import re
 
 def driver(): 
 	"""
@@ -177,40 +179,53 @@ def merge_files(path, output):
 
 def read_meta():
 	"""
-	Opens up any metadata*.txt files in the local directory or specified directory if there is one.
-	It will search the files for the EPSG code defining the projection as well as the current zone.
-	This data is saved in a dictionary named coords that is passed to the next functions.
+	Uses gdalinfo output to determine the projection zone and region of the original data.
+	Then passes this information to convert_opentopo() to convert the data to Daymet's projection.
 	"""
 
 	# Try opening the file and searching
-	try:
-		path = os.path.join(os.getcwd(), "metadata*.txt")
-		proj_info = dict()
+	proj_info = dict()
 
-		# Try to open the file and read contents
-		for meta_file in glob(path):
-			with open(meta_file) as meta:
-				for line in meta.readlines():
+	# Add the filenames to the end of the list
+	command = ['gdalinfo', 'pit.tif']
 
-					# If the line contains the EPSG Code
-					if line.startswith("Horizontal Coordinates:"):
-						proj_info['region'] = line[-8:-3]
-						proj_info['zone'] = proj_info['region'][-2:] + 'n'
-	except IOError:
-		print 'Unable to open file.'
+	# Execute the gdalwarp command
+	process = Popen(command, stdout=PIPE, shell=False)
+
+	# Check for errors
+	stdout, stderr = process.communicate()
+
+	if process.returncode != 0:
+		print stderr
+		print 'Failed to get original projection information from input data. Aborting'
 		sys.exit(1)
 
-	# Make sure that all of the data was read successfully
-	if len(proj_info) != 2:
-		print 'Coordinates not found. Verify that the metadata file exists in %s and is complete.' % os.getcwd()
-		sys.exit(1)
+	stdout = stdout.split('\n')
 
-	else:
-		# Convert the DEMs to Daymet's projection
-		print 'Converting OpenTopography DEMs to Daymet\'s projection.'
-		convert_opentopo(proj_info)
+	for line in stdout:
+		# Zone Information
+		if line.startswith('PROJCS'):
+			# Remove the punctation and break the individual words apart
+			line = line.translate(None, ',[]"/')
+			line = line.split()
+			line = line[-1]
+			# Remove the last character for North
+			proj_info['zone'] = line[:-1]
 
-		print 'Finished warping OpenTopography.\n' 
+
+		# Region Information
+		elif line.startswith('    AUTHORITY'): 
+			# Strip out the punctuation and split into space separated words
+			line = ' '.join(re.split('[,"]', line))
+			line = line.split()
+			proj_info['region'] = line[-2]
+
+	print proj_info
+	# Convert the DEMs to Daymet's projection
+	print 'Converting OpenTopography DEMs to Daymet\'s projection.'
+	convert_opentopo(proj_info)
+
+	print 'Finished warping OpenTopography.\n' 
 
 # End read_meta()
 
