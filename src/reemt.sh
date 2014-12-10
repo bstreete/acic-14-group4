@@ -66,13 +66,15 @@ echo "Elapsed time: $(($(date +%s)-$starttime))"
 #set region
 g.region -s rast=dem_10m
 
-r.in.gdal input=$1 output=tmin band=$9
+shift 1
+
+r.in.gdal input=$1 output=tmin band=$8
 echo "Elapsed time: $(($(date +%s)-$starttime))"
-r.in.gdal input=$2 output=tmax band=$9
+r.in.gdal input=$2 output=tmax band=$8
 echo "Elapsed time: $(($(date +%s)-$starttime))"
 r.in.gdal input=$3 output=twi
 echo "Elapsed time: $(($(date +%s)-$starttime))"
-r.in.gdal input=$4 output=prcp band=$9
+r.in.gdal input=$4 output=prcp band=$8
 echo "Elapsed time: $(($(date +%s)-$starttime))"
 r.in.gdal input=$5 output=dem_1km
 echo "Elapsed time: $(($(date +%s)-$starttime))"
@@ -81,7 +83,6 @@ echo "Elapsed time: $(($(date +%s)-$starttime))"
 r.in.gdal input=$7 output=flat_total_sun
 echo "Elapsed time: $(($(date +%s)-$starttime))"
 
-shift 1
 #r.sun elevin=dem_10m aspin=zeros slopein=zeros day="1" step="0.05" dist="1" glob_rad=flat_total_sun
 #r.mapcalc "S_i=total_sun/flat_total_sun"
 r.mapcalc "a_i = twi/((max(twi)+min(twi))/2)"
