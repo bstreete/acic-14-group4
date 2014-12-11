@@ -147,9 +147,8 @@ def extract_dems(archive):
 
 	# The file doesn't exist in the file system
 	else:
-		print '%s not found in the specified directory. Aborting' % archive
-		sys.exit(1)
-
+		print '%s not found in the specified directory. Skipping.' % archive
+		
 # End extract_dems()
 
 def merge_files(path, output): 
