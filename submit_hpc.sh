@@ -102,7 +102,7 @@ while getopts ":eg:n:p:a:sw:P:" o ; do
 			echo "Usage: submit_worker executable_name [-e] [-g group_name] [-n #] "
 			echo $'\t[-p project_name] [-s] [-w #]'
 			echo
-			echo "Creates a script to submit to the PBS batch system on the UA HPC that executes the passed executable."
+			echo "Creates a script to submit workers to the UA HPC system with an idle timeout of 5 minutes instead of the default 15 minutes."
 			echo
 			echo $'\t-e\tDisables the email notifications when the job begins and ends (Enabled by default).'
 			echo $'\t-g\tSpecify the group to charge for resource utilization.'
@@ -182,7 +182,7 @@ source /usr/share/Modules/init/csh
 
 date
 echo "work_queue_worker ${PASSWORD} ${PROJECT}"
-work_queue_worker $PASSWORD $PROJECT 
+work_queue_worker $PASSWORD $PROJECT -t=300
 date
 __EOF__
 
