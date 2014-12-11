@@ -139,7 +139,7 @@ echo
 if [ -z "${PASSWORD}" ] ; then 
 	echo "No password file specified."
 else
-	echo "Password File        : ${PASSWORD}"
+	echo "Password File        : ${PASSWORD:11}"
 fi
 
 if [[ "${PROJECT}" == -M* ]] ; then
