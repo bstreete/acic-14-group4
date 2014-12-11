@@ -125,13 +125,13 @@ def create_tasks(wq, input_dir, output_dir, start, end):
 
 	print '\tPreparing tasks to generate solar irradiation and insolation....'
 	# Generate the R.Sun calculations first
-	# wq, sun_total = calc_sun(wq, input_dir, output_dir)
-	sun_total = 0
+	wq, sun_total = calc_sun(wq, input_dir, output_dir)
+
 	print '\tPreparing tasks for upscaling weather data....'
 	# Generate the Upscaled weather data/EEMT model
 	wq, model_total = calc_model(wq, input_dir, output_dir, start, end) 
 
-	print '\tPreparing tasks for merging yearly results....\n'
+	print '\tPreparing tasks for merging yearly results....'
 	wq, year_total = merge_years(wq, input_dir, output_dir, start, end)
 	total = sun_total + model_total + year_total
 
