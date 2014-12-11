@@ -100,7 +100,7 @@ def init_wq(name, password_file):
 			wq = WorkQueue(port)
 			wq.specify_name(name)			
 			wq.specify_algorithm(WORK_QUEUE_TASK_ORDER_FIFO)
-			cctools_debug_flags_set("all")
+			# cctools_debug_flags_set("all")
 			if password_file is not None: 
 				wq.specify_password_file(password_file)
 
@@ -263,7 +263,7 @@ def merge_years(wq, input_dir, output_dir, start, end):
 		t.specify_output_file(output_dir + 'trad_%d.tif' % year, 'trad_%d.tif' % year)
 
 		# Specify the results directory containing daily values
-		t.specify_directory(output_dir + 'trad/', type = WORK_QUEUE_INPUT)
+		t.specify_directory(output_dir + 'trad/' , '.', type = WORK_QUEUE_INPUT)
 
 		taskid = wq.submit(t)
 		total += 1
