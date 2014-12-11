@@ -8,11 +8,11 @@ import glob
 """
 Arguments List:
 1 - Project Name 
-2 - Password File
-3 - Input Directory
-4 - Output Directory
-5 - Starting Year
-6 - Ending Year
+2 - Input Directory
+3 - Output Directory
+4 - Starting Year
+5 - Ending Year
+6 - Password File - Optional
 
 It assumes that is has been called from the root directory of the project,
 and uses the appropriate relative paths to the individual scripts. 
@@ -47,9 +47,6 @@ def driver(args):
 
 	else:
 		password_file = None
-
-
-
 
 	# Check the input directory then change to it
 	if not os.path.isdir(input_dir):	
@@ -126,21 +123,19 @@ def create_tasks(wq, input_dir, output_dir, start, end):
 	from the upscaled inputs.
 	"""
 
-	print 'Preparing tasks to generate solar irradiation and insolation....\n'
+	print '\tPreparing tasks to generate solar irradiation and insolation....'
 	# Generate the R.Sun calculations first
 	# wq, sun_total = calc_sun(wq, input_dir, output_dir)
-
-	print 'Preparing tasks for upscaling weather data....\n'
-	# Generate the Upscaled weather data/EEMT model
-	# wq, model_total = calc_model(wq, input_dir, output_dir, start, end) 
-
-	print 'Preparing tasks for merging yearly results....\n'
-	wq, year_total = merge_years(wq, input_dir, output_dir, start, end)
 	sun_total = 0
-	model_total = 0
+	print '\tPreparing tasks for upscaling weather data....'
+	# Generate the Upscaled weather data/EEMT model
+	wq, model_total = calc_model(wq, input_dir, output_dir, start, end) 
+
+	print '\tPreparing tasks for merging yearly results....\n'
+	wq, year_total = merge_years(wq, input_dir, output_dir, start, end)
 	total = sun_total + model_total + year_total
 
-	print 'Submitted %d individual jobs. Processing.\n' % total
+	print '\tSubmitted %d individual jobs. Processing.\n' % total
 
 	return wq, total
 # End create_tasks()
