@@ -130,14 +130,16 @@ else
 echo "Email Address        : ${ADDRESS}"
 fi
 
+echo
 echo "Workers Requested    : ${NODES}"
 echo "Time Requested       : ${WALLTIME} hours"
 echo "Priority Requested   : ${PRIORITY}"
 
-if [ -z $PASSWORD ] ; then 
+echo
+if [ -z ${PASSWORD} ] ; then 
 	echo "No password file specified."
 else
-	echo "Password File        : {PASSWORD}"
+	echo "Password File        : ${PASSWORD}"
 fi
 
 if [[ ${PROJECT} == -M* ]] ; then
