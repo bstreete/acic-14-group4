@@ -124,7 +124,7 @@ echo
 # Let User Verify Output
 echo "Group Name           : ${GROUP}"
 
-if [ ${EMAIL} = "###" ] ; then
+if [ "${EMAIL}" = "###" ] ; then
 	echo "No email notifications will be sent."
 else
 echo "Email Address        : ${ADDRESS}"
@@ -136,13 +136,13 @@ echo "Time Requested       : ${WALLTIME} hours"
 echo "Priority Requested   : ${PRIORITY}"
 
 echo
-if [ -z ${PASSWORD} ] ; then 
+if [ -z "${PASSWORD}" ] ; then 
 	echo "No password file specified."
 else
 	echo "Password File        : ${PASSWORD}"
 fi
 
-if [[ ${PROJECT} == -M* ]] ; then
+if [[ "${PROJECT}" == -M* ]] ; then
 	echo "Project Name         : ${PROJECT:3}"
 else
 	echo "Connecting to Master : ${PROJECT}"
