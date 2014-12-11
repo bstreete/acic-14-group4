@@ -117,7 +117,6 @@ while getopts ":eg:n:p:a:sw:P:" o ; do
 	esac			
 done	# End argument reading
 
-clear
 echo $'\t --- Submission Values ---'
 echo 
 
