@@ -171,26 +171,26 @@ fi
 
 # Print selected values, give user option to abort
 echo $'\n\t---- Values Used ----\n'
-echo "Start Year 		= $START_YEAR"
-echo "End Year   		= $END_YEAR"
-echo "Input Directory 	= $INPUT_DIR"
-echo "Output Directory 	= $OUTPUT_DIR"
-echo "Project Name 		= $PROJ_NAME"
+echo "Start Year        : $START_YEAR"
+echo "End Year          : $END_YEAR"
+echo "Input Directory   : $INPUT_DIR"
+echo "Output Directory  : $OUTPUT_DIR"
+echo "Project Name      : $PROJ_NAME"
 
 # If no password is specified, then tell the user
 if [ -z $PASSWORD ] ; then 
-	echo "Password File 	= None Specified "
+	echo "Password File     : None Specified "
 else 
-	echo "Password File 	= $PASSWORD"
+	echo "Password File     : $PASSWORD"
 fi
 
 # If the DEM isn't specified, and isn't found in the specified directory, download it
 if [ ! -e "${INPUT_DIR}${DAYMET_DEM}na_dem.tif" ] ; then
-	echo "Daymet DEM 		= Downloaded from iPlant"
+	echo "Daymet DEM        : Downloaded from iPlant"
 
 # Otherwise, show the user what they specified
 else
-	echo "Daymet DEM 		= ${INPUT_DIR}${DAYMET_DEM}na_dem.tif"
+	echo "Daymet DEM        : ${INPUT_DIR}${DAYMET_DEM}na_dem.tif"
 fi
 
 
