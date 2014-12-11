@@ -260,7 +260,7 @@ def merge_years(wq, input_dir, output_dir, start, end):
 		t = Task(' '.join(command))
 
 		# Specify the executable and output files
-		t.specify_input_file('gdal_merge.py', 'gdal_merge.py')
+		t.specify_input_file('~/gdal/bin/gdal_merge.py', 'gdal_merge.py')
 		t.specify_output_file(output_dir + 'trad_%d.tif' % year, 'trad_%d.tif' % year)
 
 		for day in range(1, 366): 
