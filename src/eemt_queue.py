@@ -263,7 +263,7 @@ def merge_years(wq, input_dir, output_dir, start, end):
 		t.specify_output_file(output_dir + 'trad_%d.tif' % year, 'trad_%d.tif' % year)
 
 		# Specify the results directory containing daily values
-		t.specify_directory(output_dir + 'trad/', type = WORK_QUEUE_INPUT)
+		t.specify_directory(output_dir + 'trad/', './' type = WORK_QUEUE_INPUT, recursive = 1)
 
 		taskid = wq.submit(t)
 		total += 1
