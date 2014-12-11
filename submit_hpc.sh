@@ -118,30 +118,32 @@ while getopts ":eg:n:p:a:sw:P:" o ; do
 done	# End argument reading
 
 clear
+echo $'\t --- Submission Values ---'
+echo 
+
 # Let User Verify Output
-echo "Group Name:	 		${GROUP}"
+echo "Group Name           : ${GROUP}"
 
 if [ ${EMAIL} = "###" ] ; then
 	echo "No email notifications will be sent."
-
 else
-echo "Email Address:		${EMAIL}"
+echo "Email Address        : ${ADDRESS}"
 fi
 
-echo "Workers Requested:	${NODES}"
-echo "Time Requested:		${WALLTIME} hours"
-echo "Priority Requested: 	${PRIORITY}"
+echo "Workers Requested    : ${NODES}"
+echo "Time Requested       : ${WALLTIME} hours"
+echo "Priority Requested   : ${PRIORITY}"
 
 if [ -z $PASSWORD ] ; then 
 	echo "No password file specified."
 else
-	echo "Password File:		{PASSWORD}"
+	echo "Password File        : {PASSWORD}"
 fi
 
 if [[ ${PROJECT} == -M* ]] ; then
-	echo "Project Name:			${PROJECT:3}"
+	echo "Project Name         : ${PROJECT:3}"
 else
-	echo "Connecting to Master:	${PROJECT}"
+	echo "Connecting to Master : ${PROJECT}"
 fi 
 echo
 read -p "Hit [Ctrl]-[C] to abort, or any key to start processing...."
