@@ -264,7 +264,7 @@ def merge_years(wq, input_dir, output_dir, start, end):
 
 		for day in range(1, 366): 
 			filename = 'eemt_%d_%d.tif' % (year, day)
-			t.specify_input_file(input_dir + filename, filename, cache = False)
+			t.specify_input_file(output_dir + filename, filename, cache = False)
 
 		taskid = wq.submit(t)
 		total += 1
