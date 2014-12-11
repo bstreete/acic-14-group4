@@ -254,7 +254,7 @@ def merge_years(wq, input_dir, output_dir, start, end):
 
 		# For every day that year 
 		for day in range(1, 366): 
-			abs_path = os.join.path(os.getcwd(), output_dir)
+			abs_path = os.path.join(os.getcwd(), output_dir)
 			command.append(abs_path + 'eemt_%d_%d.tif' % (year, day))
 
 		t = Task(' '.join(command))
