@@ -128,15 +128,16 @@ def create_tasks(wq, input_dir, output_dir, start, end):
 
 	print 'Preparing tasks to generate solar irradiation and insolation....\n'
 	# Generate the R.Sun calculations first
-	wq, sun_total = calc_sun(wq, input_dir, output_dir)
+	# wq, sun_total = calc_sun(wq, input_dir, output_dir)
 
 	print 'Preparing tasks for upscaling weather data....\n'
 	# Generate the Upscaled weather data/EEMT model
-	wq, model_total = calc_model(wq, input_dir, output_dir, start, end) 
+	# wq, model_total = calc_model(wq, input_dir, output_dir, start, end) 
 
 	print 'Preparing tasks for merging yearly results....\n'
 	wq, year_total = merge_years(wq, input_dir, output_dir, start, end)
-
+	sun_total = 0
+	model_total = 0
 	total = sun_total + model_total + year_total
 
 	print 'Submitted %d individual jobs. Processing.\n' % total
@@ -255,6 +256,7 @@ def merge_years(wq, input_dir, output_dir, start, end):
 		for day in range(1, 366): 
 			command.append('eemt_%d_%d.tif' % (year, day))
 
+		print ' '.join(command)
 		t = Task(' '.join(command))
 
 		# Specify the executable and output files
