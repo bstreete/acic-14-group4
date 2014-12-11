@@ -254,7 +254,7 @@ def merge_years(wq, input_dir, output_dir, start, end):
 
 		# For every day that year 
 		for day in range(1, 366): 
-			command.append('eemt_%d_%d.tif' % (year, day))
+			command.append(output_dir + 'eemt_%d_%d.tif' % (year, day))
 
 		t = Task(' '.join(command))
 
@@ -263,8 +263,8 @@ def merge_years(wq, input_dir, output_dir, start, end):
 		t.specify_output_file(output_dir + 'trad_%d.tif' % year, 'trad_%d.tif' % year)
 
 		for day in range(1, 366): 
-			filename = 'eemt_%d_%d.tif' % (year, day)
-			t.specify_input_file(output_dir + filename, filename, cache = False)
+			# filename = 'eemt_%d_%d.tif' % (year, day)
+			# t.specify_input_file(output_dir + filename, filename, cache = False)
 
 		taskid = wq.submit(t)
 		total += 1
