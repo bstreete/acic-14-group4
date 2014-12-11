@@ -162,8 +162,8 @@ def calc_sun(wq, input_dir, output_dir):
 	for day in xrange(1,366):
 	
 		# Generate the names of the output files
-		sun_flat = output_dir + 'sun_%d_flat.tif' % day
-		sun_total = output_dir + 'sun_%d_total.tif' % day
+		sun_flat = output_dir + 'sun/sun_%d_flat.tif' % day
+		sun_total = output_dir + 'sun/sun_%d_total.tif' % day
 
 		command = './rsun.sh pit_c.tif %d sun_%d_total.tif sun_%d_flat.tif' % (day, day, day)
 
@@ -209,10 +209,10 @@ def calc_model(wq, input_dir, output_dir, start, end):
 			# wildcard for prcp
 			prcp = glob.glob('daymet/*/*_%d_prcp.tif' % year)
 
-			sun_flat = output_dir + 'sun_%d_flat.tif' % day
-			sun_total = output_dir + 'sun_%d_total.tif' % day
+			sun_flat = output_dir + 'sun/sun_%d_flat.tif' % day
+			sun_total = output_dir + 'sun/sun_%d_total.tif' % day
 
-			output = output_dir + 'eemt_%d_%d.tif' % (year, day)
+			output = output_dir + 'trad/eemt_%d_%d.tif' % (year, day)
 
 			command = './reemt.sh pit_c.tif tmin.tif tmax.tif twi_c.tif prcp.tif na_dem.part.tif sun_total.tif sun_flat.tif %d eemt.tif' % day
 			t = Task(command)
@@ -254,7 +254,7 @@ def merge_years(wq, input_dir, output_dir, start, end):
 
 		# For every day that year 
 		for day in range(1, 366): 
-			command.append('eemt_%d_%d.tif' % (year, day))
+			command.append('trad/eemt_%d_%d.tif' % (year, day))
 
 		t = Task(' '.join(command))
 
@@ -262,9 +262,8 @@ def merge_years(wq, input_dir, output_dir, start, end):
 		t.specify_input_file('src/gdal_merge.py', 'gdal_merge.py')
 		t.specify_output_file(output_dir + 'trad_%d.tif' % year, 'trad_%d.tif' % year)
 
-		for day in range(1, 366): 
-			filename = 'eemt_%d_%d.tif' % (year, day)
-			t.specify_input_file(output_dir + filename, filename, cache = False)
+		# Specify the results directory containing daily values
+		t.specify_directory(output_dir + 'trad/')
 
 		taskid = wq.submit(t)
 		total += 1
