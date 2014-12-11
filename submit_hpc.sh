@@ -124,10 +124,10 @@ echo
 # Let User Verify Output
 echo "Group Name           : ${GROUP}"
 
-if [ "${EMAIL}" = "###" ] ; then
-	echo "No email notifications will be sent."
+if [ ${EMAIL} = "###" ] ; then
+	echo "Email                : Notifications Disabled"
 else
-echo "Email Address        : ${ADDRESS}"
+echo "Email                : ${ADDRESS}"
 fi
 
 echo
@@ -137,7 +137,7 @@ echo "Priority Requested   : ${PRIORITY}"
 
 echo
 if [ -z "${PASSWORD}" ] ; then 
-	echo "No password file specified."
+	echo "Password File        : None Specified"
 else
 	echo "Password File        : ${PASSWORD:11}"
 fi
