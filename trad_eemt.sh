@@ -179,14 +179,14 @@ echo "Project Name 		= $PROJ_NAME"
 
 # If no password is specified, then tell the user
 if [ -z $PASSWORD ] ; then 
-	echo "No password file specified. "
+	echo "Password File 	= None Specified "
 else 
 	echo "Password File 	= $PASSWORD"
 fi
 
 # If the DEM isn't specified, and isn't found in the specified directory, download it
 if [ ! -e "${INPUT_DIR}${DAYMET_DEM}na_dem.tif" ] ; then
-	echo "Daymet DEM will be downloaded from iPlant."
+	echo "Daymet DEM 		= Downloaded from iPlant"
 
 # Otherwise, show the user what they specified
 else
