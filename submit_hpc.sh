@@ -117,6 +117,38 @@ while getopts ":eg:n:p:a:sw:P:" o ; do
 	esac			
 done	# End argument reading
 
+clear
+# Let User Verify Output
+echo "Group Name:	 		${GROUP}"
+
+if [ ${EMAIL} = "###" ] ; then
+	echo "No email notifications will be sent."
+
+else
+echo "Email Address:		${EMAIL}"
+fi
+
+echo "Workers Requested:	${NODES}"
+echo "Time Requested:		${WALLTIME} hours"
+echo "Priority Requested: 	${PRIORITY}"
+
+if [ -z $PASSWORD ] ; then 
+	echo "No password file specified."
+else
+	echo "Password File:		{PASSWORD}"
+fi
+
+if [[ ${PROJECT} == -M* ]] ; then
+	echo "Project Name:			${PROJECT:3}"
+else
+	echo "Connecting to Master:	${PROJECT}"
+fi 
+echo
+read -p "Hit [Ctrl]-[C] to abort, or any key to start processing...."
+echo
+
+wait
+
 # Finish calculating variables
 CPUTIME=$(($WALLTIME * $NODES))
 WALLTIME=$WALLTIME:0:0
