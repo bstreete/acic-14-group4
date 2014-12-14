@@ -6,7 +6,6 @@
 stepsize=0.05
 interval=1
 starttime=$(date +%s)
-day=$7
 #loop head
 #input
 
@@ -69,22 +68,16 @@ g.region -s rast=dem_10m
 shift 1
 
 r.in.gdal input=$1 output=tmin band=$8
-echo "Elapsed time: $(($(date +%s)-$starttime))"
 r.in.gdal input=$2 output=tmax band=$8
-echo "Elapsed time: $(($(date +%s)-$starttime))"
 r.in.gdal input=$3 output=twi
-echo "Elapsed time: $(($(date +%s)-$starttime))"
 r.in.gdal input=$4 output=prcp band=$8
-echo "Elapsed time: $(($(date +%s)-$starttime))"
 r.in.gdal input=$5 output=dem_1km
-echo "Elapsed time: $(($(date +%s)-$starttime))"
 r.in.gdal input=$6 output=total_sun
-echo "Elapsed time: $(($(date +%s)-$starttime))"
 r.in.gdal input=$7 output=flat_total_sun
-echo "Elapsed time: $(($(date +%s)-$starttime))"
+r.in.gdal input=${10} output=hours_sun
+r.in.gdal input=${11} output=aspect
+r.in.gdal input=${12} output=slope
 
-#r.sun elevin=dem_10m aspin=zeros slopein=zeros day="1" step="0.05" dist="1" glob_rad=flat_total_sun
-#r.mapcalc "S_i=total_sun/flat_total_sun"
 r.mapcalc "a_i = twi/((max(twi)+min(twi))/2)"
 r.mapcalc "c_w = 4185.5"
 #r.mapcalc "NPP=0"
@@ -110,11 +103,21 @@ r.mapcalc "tmax_topo = tmax_loc*(S_i-(1/S_i))"
 #r.mapcalc "AET=prcp*(1+PET/prcp(1(PET/prcp)2.63)(1/2.63))"
 r.mapcalc "DT = ((tmax_topo+tmin_topo)/2)-273.15"
 r.mapcalc "F = a_i*prcp"
-r.mapcalc "npp_trad = 3000*(1+exp(1.315-0.119*(tmax_loc+tmin_loc)/2)^-1)"
-r.mapcalc "NPP = npp_trad"
-r.mapcalc "EEMT = F*c_w*DT+NPP*h_bio"
+r.mapcalc "NPP_trad = 3000*(1+exp(1.315-0.119*(tmax_loc+tmin_loc)/2)^-1)"
+r.mapcalc "N = sin(slope)*cos(aspect*0.0174532925)"
+r.mapcalc "NPP_topo = 0.39*dem_10m+346*N-187"
+r.mapcalc "E_bio = NPP_trad*h_bio"
+r.mapcalc "f_tmin_loc=6.108*exp((17.27*tmin_loc)/(tmin_loc+273.3))"
+r.mapcalc "f_tmax_loc=6.108*exp((17.27*tmax_loc)/(tmax_loc+273.3))"
+r.mapcalc "vp_s=(f_tmax_loc+f_tmin_loc)/2"
+r.mapcalc "PET=(2.1*((hours_sun/12)^2)*vp_s/((tmax_loc+tmin_loc)/2)"
+r.mapcalc "E_ppt=monthly_prcp - PET"
+r.mapcalc "EEMT_trad = E_ppt+E_bio"
+r.mapcalc "EEMT_topo = F*c_w*DT*NPP_topo*h_bio+NPP_topo*h_bio"
 #output
-r.out.gdal -c createopt="TFW=YES,COMPRESS=LZW" input=EEMT output=$eemt_tif
+r.out.gdal -c createopt="TFW=YES,COMPRESS=LZW" input=EEMT_trad output="trad_$eemt_tif"
+r.out.gdal -c createopt="TFW=YES,COMPRESS=LZW" input=EEMT_topo output="topo_$eemt_tif"
+echo "Elapsed time: $(($(date +%s)-$starttime))"
 echo "Elapsed time: $(($(date +%s)-$starttime))"
 g.mremove -f "*"
 
