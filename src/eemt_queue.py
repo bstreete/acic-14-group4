@@ -219,7 +219,7 @@ def calc_model(wq, input_dir, output_dir, start, end):
 
 			trad = output_dir + 'trad/trad_%d_%d.tif' % (year, day)
 			topo = output_dir + 'topo/topo_%d_%d.tif' % (year, day)
-			command = './reemt.sh pit_c.tif tmin.tif tmax.tif twi_c.tif prcp.tif na_dem.part.tif sun_total.tif sun_flat.tif %d %d_%d.tif sun_hours sun_aspect sun_slope' % (day, year, day)
+			command = './reemt.sh pit_c.tif tmin.tif tmax.tif twi_c.tif prcp.tif na_dem.part.tif sun_total.tif sun_flat.tif %d %d_%d.tif sun_hours.tif sun_aspect.tif sun_slope.tif' % (day, year, day)
 			t = Task(command)
 
 			# List all of the necessary input files 
@@ -233,8 +233,8 @@ def calc_model(wq, input_dir, output_dir, start, end):
 			t.specify_input_file(sun_flat, 'sun_flat.tif')
 			t.specify_input_file(sun_total, 'sun_total.tif')
 			t.specify_input_file(sun_hours, 'sun_hours.tif')
-			t.specify_input_file(sun_aspect, 'sun_aspect')
-			t.specify_input_file(sun_slope, 'sun_slope')
+			t.specify_input_file(sun_aspect, 'sun_aspect.tif')
+			t.specify_input_file(sun_slope, 'sun_slope.tif')
 
 			t.specify_output_file(trad, 'trad_%d_%d.tif' % (year, day))
 			t.specify_output_file(topo, 'topo_%d_%d.tif' % (year, day))
@@ -261,7 +261,7 @@ def merge_years(wq, input_dir, output_dir, start, end):
 	# For each year: 
 	for year in range(int(start), int(end) + 1): 
 		for entry in ['trad', 'topo']:
-			command = ['ls -R;./gdal_merge.py', '-separate', '-o', 'trad_%d.tif' % year]
+			command = ['./gdal_merge.py', '-separate', '-o', 'trad_%d.tif' % year]
 
 			# For every day that year 
 			for day in range(1, 2): 
@@ -274,7 +274,7 @@ def merge_years(wq, input_dir, output_dir, start, end):
 			t.specify_output_file(output_dir + entry + '_%d.tif' % year, entry + '_%d.tif' % year)
 
 			# Specify the results directory containing daily values
-			t.specify_directory(output_dir + 'trad/', './', type = WORK_QUEUE_INPUT, recursive = 1)
+			t.specify_directory(output_dir + entry + '/', './', type = WORK_QUEUE_INPUT, recursive = 1)
 
 			taskid = wq.submit(t)
 			total += 1
