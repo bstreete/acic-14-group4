@@ -154,7 +154,7 @@ def calc_sun(wq, input_dir, output_dir):
 	
 
 	# Start iterating over the days of the year
-	for day in xrange(1,366):
+	for day in xrange(1,2):
 	
 		# Generate the names of the output files
 		sun_flat = output_dir + 'sun/sun_%d_flat.tif' % day
@@ -201,7 +201,7 @@ def calc_model(wq, input_dir, output_dir, start, end):
 	script = 'src/reemt.sh'
 
 	# Loop here 
-	for day in range(1, 366): 
+	for day in range(1, 2): 
 
 		for year in range(int(start), int(end) + 1): 
 			# wildcard for tmin
@@ -264,7 +264,7 @@ def merge_years(wq, input_dir, output_dir, start, end):
 			command = ['ls -R;./gdal_merge.py', '-separate', '-o', 'trad_%d.tif' % year]
 
 			# For every day that year 
-			for day in range(1, 366): 
+			for day in range(1, 2): 
 				command.append(entry + '_%d_%d.tif' % (year, day))
 
 			t = Task(' '.join(command))
