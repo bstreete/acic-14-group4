@@ -123,10 +123,6 @@ def create_tasks(wq, input_dir, output_dir, start, end):
 	from the upscaled inputs.
 	"""
 
-	print '\tPreparing tasks to download climate data from Daymet....'
-
-	wq, day_total = download_daymet(wq, input_dir, start, end)
-
 	print '\tPreparing tasks to generate solar irradiation and insolation....'
 	# Generate the R.Sun calculations first
 	wq, sun_total = calc_sun(wq, input_dir, output_dir)
@@ -137,41 +133,12 @@ def create_tasks(wq, input_dir, output_dir, start, end):
 
 	print '\tPreparing tasks for merging yearly results....'
 	wq, year_total = merge_years(wq, input_dir, output_dir, start, end)
-	total = sun_total + model_total + year_total + day_total
+	total = sun_total + model_total + year_total
 
 	print '\tSubmitted %d individual jobs. Processing.\n' % total
 
 	return wq, total
 # End create_tasks()
-
-def download_daymet(wq, input_dir, start, end): 
-	"""
-	Generates the Work Queeu tasks to download all of the needed 
-	data from Daymet for all of the requested years. 
-	"""
-
-	total = 0
-	script = 'src/process_dem.py'
-	parser = 'src/tiffparser.py'
-	param = ['tmin', 'tmax', 'prcp']
-	pit = input_dir + 'pit_c.tif'
-
-	for year in xrange(int(start), int(end) + 1): 
-		for entry in param: 
-			command = 'python2.7 process_dem.py pit_c.tif %d %d %s' % (year, year, entry)
-
-			output = input_dir + 'daymet/%d_%s.tif' % (year, entry)
-			t = Task(command)
-
-			t.specify_input_file(parser, 'tiffparser.py')
-			t.specify_input_file(script, 'process_dem.py')
-			t.specify_input_file(pit, 'pit_c.tif')
-			t.specify_output_file(output, 'daymet/*/*_%d_%s.tif' % (year, entry))
-
-			wq.submit(t)
-			total += 1
-
-	return wq, total
 
 def calc_sun(wq, input_dir, output_dir): 
 	"""

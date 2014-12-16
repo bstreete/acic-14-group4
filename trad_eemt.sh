@@ -216,6 +216,20 @@ if [ $? -ne 0 ] ; then
 	exit 1
 fi
 
+cd $INPUT_DIR
+# Download Daymet Information
+python2.7 ${SRC}/src/process_dem.py ${START_DIR}/${INPUT_DIR}pit_c.tif $START_YEAR $END_YEAR tmin tmax prcp
+
+# If process_dem.py failed, don't continue executing
+if [ $? -ne 0 ] ; then
+	echo
+	echo "Failed downloading Daymet data. Please check errors. Aborting...."
+	echo
+	exit 1
+fi
+
+cd $START_DIR
+
 echo
 echo "Starting task generation....."
 echo
