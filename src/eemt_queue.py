@@ -159,8 +159,11 @@ def calc_sun(wq, input_dir, output_dir):
 		# Generate the names of the output files
 		sun_flat = output_dir + 'sun/sun_%d_flat.tif' % day
 		sun_total = output_dir + 'sun/sun_%d_total.tif' % day
+		sun_hours = output_dir + 'sun/sun_%d_hours.tif' % day
+		sun_aspect = output_dir + 'sun/sun_%d_aspect.tif' % day
+		sun_slope = output_dir + 'sun/sun_%d_slope.tif' % day
 
-		command = './rsun.sh pit_c.tif %d sun_%d_total.tif sun_%d_flat.tif' % (day, day, day)
+		command = './rsun.sh pit_c.tif %d sun_%d_total.tif sun_%d_flat.tif sun_%d_hours.tif sun_%d_aspect.tif sun_%d_slope.tif' % (day, day, day)
 
 		# Create the task
 		t = Task(command)
@@ -170,6 +173,10 @@ def calc_sun(wq, input_dir, output_dir):
 		t.specify_input_file(dem, 'pit_c.tif', cache = True)
 		t.specify_output_file(sun_flat, 'sun_%d_flat.tif' % day, cache = True)
 		t.specify_output_file(sun_total, 'sun_%d_total.tif' % day, cache = True)
+		t.specify_output_file(sun_hours, 'sun_%d_hours.tif' % day)
+		t.specify_output_file(sun_aspect, 'sun_%d_aspect.tif' % day)
+		t.specify_output_file(sun_slope, 'sun_%d_slope.tif' % day)
+		
 		taskid = wq.submit(t)
 		total += 1
 	# End loop
@@ -206,10 +213,13 @@ def calc_model(wq, input_dir, output_dir, start, end):
 
 			sun_flat = output_dir + 'sun/sun_%d_flat.tif' % day
 			sun_total = output_dir + 'sun/sun_%d_total.tif' % day
+			sun_hours = output_dir + 'sun/sun_%d_hours.tif' % day
+			sun_aspect = output_dir + 'sun/sun_%d_aspect.tif' % day
+			sun_slope = output_dir + 'sun/sun_%d_slope.tif' % day
 
-			output = output_dir + 'trad/eemt_%d_%d.tif' % (year, day)
-
-			command = './reemt.sh pit_c.tif tmin.tif tmax.tif twi_c.tif prcp.tif na_dem.part.tif sun_total.tif sun_flat.tif %d eemt.tif' % day
+			trad = output_dir + 'trad/trad_%d_%d.tif' % (year, day)
+			topo = output_dir + 'topo/topo_%d_%d.tif' % (year, day)
+			command = './reemt.sh pit_c.tif tmin.tif tmax.tif twi_c.tif prcp.tif na_dem.part.tif sun_total.tif sun_flat.tif %d %d_%d sun_hours sun_aspect sun_slope' % (day, year, day)
 			t = Task(command)
 
 			# List all of the necessary input files 
@@ -222,7 +232,13 @@ def calc_model(wq, input_dir, output_dir, start, end):
 			t.specify_input_file(prcp[0], 'prcp.tif')
 			t.specify_input_file(sun_flat, 'sun_flat.tif')
 			t.specify_input_file(sun_total, 'sun_total.tif')
-			t.specify_output_file(output, 'eemt.tif')
+			t.specify_input_file(sun_hours, 'sun_hours.tif')
+			t.specify_input_file(sun_aspect, 'sun_aspect')
+			t.speficy_input_file(sun_slope, 'sun_slope')
+			
+			t.specify_output_file(trad, 'trad_%d_%d.tif' % (year, day))
+			t.specify_output_file(topo, 'topo_%d_%d.tif' % (year, day))
+
 			taskid = wq.submit(t)
 
 			total += 1
