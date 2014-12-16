@@ -1,23 +1,24 @@
 #!/bin/bash
 
-# Set a temporary configuration file
-export GISRC=${HOME}/.grassrc_$2
+$FILENAME=$9_$RANDOM
+# Setup temporary config files
+export GISRC=${HOME}/.grassrc_${FILENAME}
 
 if [ ! -e ${HOME}/grassdata ] ; then
 	mkdir ${HOME}/grassdata
 fi
 
-if [ ! -e ${HOME}/grassdata/tmp_$2 ] ; then
-	mkdir ${HOME}/grassdata/tmp_$2
+if [ ! -e ${HOME}/grassdata/tmp_${FILENAME} ] ; then
+	mkdir ${HOME}/grassdata/tmp_${FILENAME}
 fi
 
-if [ ! -e ${HOME}/grassdata/tmp_$2/PERMANENT ] ; then 
-	mkdir ${HOME}/grassdata/tmp_$2/PERMANENT
+if [ ! -e ${HOME}/grassdata/tmp_${FILENAME}/PERMANENT ] ; then 
+	mkdir ${HOME}/grassdata/tmp_${FILENAME}/PERMANENT
 fi
 
-if [ ! -e ${HOME}/grassdata/tmp_$2/PERMANENT/DEFAULT_WIND ] ; then 
+if [ ! -e ${HOME}/grassdata/tmp_${FILENAME}/PERMANENT/DEFAULT_WIND ] ; then 
 # Set wind information
-	cat > "${HOME}/grassdata/tmp_$2/PERMANENT/DEFAULT_WIND" << __EOF__
+	cat > "${HOME}/grassdata/tmp_${FILENAME}/PERMANENT/DEFAULT_WIND" << __EOF__
 
 	proj: 99
 	zone: 0
@@ -39,13 +40,13 @@ if [ ! -e ${HOME}/grassdata/tmp_$2/PERMANENT/DEFAULT_WIND ] ; then
 	t-b resol: 1
 __EOF__
 
-	cp ${HOME}/grassdata/tmp_$2/PERMANENT/DEFAULT_WIND ${HOME}/grassdata/tmp_$2/PERMANENT/WIND
+	cp ${HOME}/grassdata/tmp_${FILENAME}/PERMANENT/DEFAULT_WIND ${HOME}/grassdata/tmp_${FILENAME}/PERMANENT/WIND
 fi
- 
-echo "GISDBASE: ${HOME}/grassdata" >${HOME}/.grassrc_$2
-echo "LOCATION_NAME: tmp_$2" >> ${HOME}/.grassrc_$2
-echo "MAPSET: PERMANENT" >> ${HOME}/.grassrc_$2
-echo "GRASS_GUI: text" >> ${HOME}/.grassrc_$2
+
+echo "GISDBASE: ${HOME}/grassdata" >${HOME}/.grassrc_${FILENAME}
+echo "LOCATION_NAME: tmp_${FILENAME}" >> ${HOME}/.grassrc_${FILENAME}
+echo "MAPSET: PERMANENT" >> ${HOME}/.grassrc_${FILENAME}
+echo "GRASS_GUI: text" >> ${HOME}/.grassrc_${FILENAME}
 
 #Parameter setting
 stepsize=0.05
