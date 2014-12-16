@@ -182,7 +182,7 @@ source /usr/share/Modules/init/csh
 
 date
 echo "work_queue_worker ${PASSWORD} ${PROJECT}"
-work_queue_worker $PASSWORD $PROJECT -t=300
+work_queue_worker $PASSWORD $PROJECT -t 180
 date
 __EOF__
 
