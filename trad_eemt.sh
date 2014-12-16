@@ -234,6 +234,13 @@ echo
 echo "Starting task generation....."
 echo
 
+if [ ! -d ${OUTPUT_DIR}/trad ] ; then
+	mkdir ${OUTPUT_DIR}/trad
+fi
+
+if [ ! -d ${OUTPUT_DIR}/topo ] ; then
+	mkdir ${OUTPUT_DIR}/topo
+fi
 # Start makeflow 
 ${SRC}/src/eemt_queue.py $PROJ_NAME $INPUT_DIR $OUTPUT_DIR $START_YEAR $END_YEAR $PASSWORD 
 
