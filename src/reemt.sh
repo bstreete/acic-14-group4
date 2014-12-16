@@ -9,7 +9,7 @@ starttime=$(date +%s)
 #loop head
 #input
 
-$FILENAME=$9_$RANDOM
+FILENAME=$9_$RANDOM
 # Setup temporary config files
 export GISRC=${HOME}/.grassrc_${FILENAME}
 
