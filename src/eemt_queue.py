@@ -219,7 +219,7 @@ def calc_model(wq, input_dir, output_dir, start, end):
 
 			trad = output_dir + 'trad/trad_%d_%d.tif' % (year, day)
 			topo = output_dir + 'topo/topo_%d_%d.tif' % (year, day)
-			command = './reemt.sh pit_c.tif tmin.tif tmax.tif twi_c.tif prcp.tif na_dem.part.tif sun_total.tif sun_flat.tif %d %d_%d sun_hours sun_aspect sun_slope' % (day, year, day)
+			command = './reemt.sh pit_c.tif tmin.tif tmax.tif twi_c.tif prcp.tif na_dem.part.tif sun_total.tif sun_flat.tif %d %d_%d.tif sun_hours sun_aspect sun_slope' % (day, year, day)
 			t = Task(command)
 
 			# List all of the necessary input files 
@@ -260,24 +260,24 @@ def merge_years(wq, input_dir, output_dir, start, end):
 
 	# For each year: 
 	for year in range(int(start), int(end) + 1): 
+		for entry in ['trad', 'topo']:
+			command = ['ls -R;./gdal_merge.py', '-separate', '-o', 'trad_%d.tif' % year]
 
-		command = ['ls -R;./gdal_merge.py', '-separate', '-o', 'trad_%d.tif' % year]
+			# For every day that year 
+			for day in range(1, 366): 
+				command.append(entry + '_%d_%d.tif' % (year, day))
 
-		# For every day that year 
-		for day in range(1, 366): 
-			command.append('eemt_%d_%d.tif' % (year, day))
+			t = Task(' '.join(command))
 
-		t = Task(' '.join(command))
+			# Specify the executable and output files
+			t.specify_input_file('src/gdal_merge.py', 'gdal_merge.py')
+			t.specify_output_file(output_dir + entry + '_%d.tif' % year, entry + '_%d.tif' % year)
 
-		# Specify the executable and output files
-		t.specify_input_file('src/gdal_merge.py', 'gdal_merge.py')
-		t.specify_output_file(output_dir + 'trad_%d.tif' % year, 'trad_%d.tif' % year)
+			# Specify the results directory containing daily values
+			t.specify_directory(output_dir + 'trad/', './', type = WORK_QUEUE_INPUT, recursive = 1)
 
-		# Specify the results directory containing daily values
-		t.specify_directory(output_dir + 'trad/', './', type = WORK_QUEUE_INPUT, recursive = 1)
-
-		taskid = wq.submit(t)
-		total += 1
+			taskid = wq.submit(t)
+			total += 1
 
 	return wq, total
 
