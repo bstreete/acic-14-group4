@@ -155,7 +155,7 @@ def download_daymet(wq, input_dir, start, end):
 	param = ['tmin', 'tmax', 'prcp']
 	pit = input_dir + 'pit_c.tif'
 
-	for year in xrange(int(start), int(end + 1)): 
+	for year in xrange(int(start), int(end) + 1): 
 		for entry in param: 
 			command = 'python2.7 process_dem.py pit_c.tif %d %d %s' % (year, year, entry)
 
