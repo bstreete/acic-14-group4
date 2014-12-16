@@ -23,7 +23,7 @@ PASSWORD=""
 # Generate absolute path to the install directory
 SRC="$(readlink -f $0)"
 SRC="$(dirname $SRC)"
-
+START_DIR=${PWD}
 # Process arguments
 while getopts ":i:o:p:s:e:d:P:" o ; do
 	case "${o}" in 
@@ -216,8 +216,11 @@ if [ $? -ne 0 ] ; then
 	exit 1
 fi
 
+cd $INPUT_DIR
 # Download Daymet Information
 python2.7 ${SRC}/src/process_dem.py ${INPUT_DIR}pit_c.tif $START_YEAR $END_YEAR tmin tmax prcp
+
+cd $START_DIR
 
 # If process_dem.py failed, don't continue executing
 if [ $? -ne 0 ] ; then
