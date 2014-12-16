@@ -152,6 +152,7 @@ def download_daymet(wq, input_dir, start, end):
 
 	total = 0
 	script = 'src/process_dem.py'
+	parser = 'src/tiffparser.py'
 	param = ['tmin', 'tmax', 'prcp']
 	pit = input_dir + 'pit_c.tif'
 
@@ -162,6 +163,7 @@ def download_daymet(wq, input_dir, start, end):
 			output = input_dir + 'daymet/%d_%s.tif' % (year, entry)
 			t = Task(command)
 
+			t.specify_input_file(parser, 'tiffparser.py')
 			t.specify_input_file(script, 'process_dem.py')
 			t.specify_input_file(pit, 'pit_c.tif')
 			t.specify_output_file(output, 'daymet/*/*_%d_%s.tif' % (year, entry))
