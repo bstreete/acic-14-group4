@@ -54,7 +54,9 @@ starttime=$(date +%s)
 day=$2
 outputts=$3
 outputfts=$4
-
+outpuths=$5
+outputasp=$6
+outputslp=$7
 #update project info
 g.proj -c proj4="+proj=lcc +lat_1=25 +lat_2=60 +lat_0=42.5 +lon_0=-100 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"
 #loop head
@@ -78,6 +80,9 @@ r.sun elevin=dem_10m aspin=zeros slopein=zeros day="${day}" step="${stepsize}" d
 echo "Elapsed time: $(($(date +%s)-$starttime))"
 r.out.gdal -c createopt="TFW=YES,COMPRESS=LZW" input=total_sun output=$outputts
 r.out.gdal -c createopt="TFW=YES,COMPRESS=LZW" input=flat_total_sun output=$outputfts
+r.out.gdal -c createopt="TFW=YES,COMPRESS=LZW" input=hours_sun output=$outpuths
+r.out.gdal -c createopt="TFW=YES,COMPRESS=LZW" input=aspect output=$outputasp
+r.out.gdal -c createopt="TFW=YES,COMPRESS=LZW" input=slope output=$outputslp
 
 echo "Cleaning up temporary files...."
 rm -rf ${HOME}/grassdata/temp_$2
