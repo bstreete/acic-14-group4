@@ -112,7 +112,7 @@ r.mapcalc "f_tmin_loc=6.108*exp((17.27*tmin_loc)/(tmin_loc+273.3))"
 r.mapcalc "f_tmax_loc=6.108*exp((17.27*tmax_loc)/(tmax_loc+273.3))"
 r.mapcalc "vp_s=(f_tmax_loc+f_tmin_loc)/2"
 r.mapcalc "PET=(2.1*((hours_sun/12)^2)*vp_s/((tmax_loc+tmin_loc)/2))"
-r.mapcalc "E_ppt=monthly_prcp - PET"
+r.mapcalc "E_ppt=prcp - PET"
 r.mapcalc "EEMT_trad = E_ppt+E_bio"
 r.mapcalc "EEMT_topo = F*c_w*DT*NPP_topo*h_bio+NPP_topo*h_bio"
 #output
