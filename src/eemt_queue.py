@@ -265,7 +265,7 @@ def calc_model(wq, input_dir, output_dir, start, end):
 			t.specify_input_file(sun_total, 'sun_total.tif')
 			t.specify_input_file(sun_hours, 'sun_hours.tif')
 			t.specify_input_file(sun_aspect, 'sun_aspect')
-			t.speficy_input_file(sun_slope, 'sun_slope')
+			t.specify_input_file(sun_slope, 'sun_slope')
 
 			t.specify_output_file(trad, 'trad_%d_%d.tif' % (year, day))
 			t.specify_output_file(topo, 'topo_%d_%d.tif' % (year, day))
