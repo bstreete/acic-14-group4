@@ -86,5 +86,5 @@ r.out.gdal -c createopt="TFW=YES,COMPRESS=LZW" input=aspect output=$outputasp
 r.out.gdal -c createopt="TFW=YES,COMPRESS=LZW" input=slope output=$outputslp
 
 echo "Cleaning up temporary files...."
-rm -rf ${HOME}/grassdata/temp_$2
-rm ${HOME}/.grassrc_$2
+rm -rf ${HOME}/grassdata/temp_${FILENAME}
+rm ${HOME}/.grassrc_${FILENAME}

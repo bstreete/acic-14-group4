@@ -124,5 +124,5 @@ g.mremove -f "*"
 
 # Use $8 instead $9 because of shift @ Line 79
 echo "Cleaning up temporary files...."
-rm -rf ${HOME}/grassdata/tmp_$8
-rm ${HOME}/.grassrc_$8
+rm -rf ${HOME}/grassdata/tmp_${FILENAME}
+rm ${HOME}/.grassrc_${FILENAME}
