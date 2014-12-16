@@ -261,7 +261,7 @@ def merge_years(wq, input_dir, output_dir, start, end):
 	# For each year: 
 	for year in range(int(start), int(end) + 1): 
 		for entry in ['trad', 'topo']:
-			command = ['./gdal_merge.py', '-separate', '-o', 'trad_%d.tif' % year]
+			command = ['./gdal_merge.py', '-separate', '-o', entry + '_%d.tif' % year]
 
 			# For every day that year 
 			for day in range(1, 2): 
