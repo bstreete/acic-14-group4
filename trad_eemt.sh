@@ -241,6 +241,11 @@ fi
 if [ ! -d ${OUTPUT_DIR}/topo ] ; then
 	mkdir ${OUTPUT_DIR}/topo
 fi
+
+if [ ! -d ${OUTPUT_DIR}/sun ] ; then 
+	mkdir ${OUTPUT_DIR}/sun
+fi
+
 # Start makeflow 
 ${SRC}/src/eemt_queue.py $PROJ_NAME $INPUT_DIR $OUTPUT_DIR $START_YEAR $END_YEAR $PASSWORD 
 
