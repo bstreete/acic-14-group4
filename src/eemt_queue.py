@@ -205,11 +205,11 @@ def calc_model(wq, input_dir, output_dir, start, end):
 
 		for year in range(int(start), int(end) + 1): 
 			# wildcard for tmin
-			tmin = glob.glob(input_dir + 'daymet/tif/*_%d_tmin.tif' % year)
+			tmin = glob.glob(input_dir + 'daymet/*/*_%d_tmin.tif' % year)
 			# wildcard for tmax
-			tmax = glob.glob(input_dir + 'daymet/tif/*_%d_tmax.tif' % year)
+			tmax = glob.glob(input_dir + 'daymet/*/*_%d_tmax.tif' % year)
 			# wildcard for prcp
-			prcp = glob.glob(input_dir + 'daymet/tif/*_%d_prcp.tif' % year)
+			prcp = glob.glob(input_dir + 'daymet/*/*_%d_prcp.tif' % year)
 
 			sun_flat = output_dir + 'sun/sun_%d_flat.tif' % day
 			sun_total = output_dir + 'sun/sun_%d_total.tif' % day
