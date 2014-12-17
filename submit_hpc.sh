@@ -156,7 +156,7 @@ wait
 CPUTIME=$(($WALLTIME * $NODES))
 WALLTIME=$WALLTIME:0:0
 
-SCRIPT="qsub_wq_worker_${USER}.pbs"
+SCRIPT="qsub_wq_worker.pbs"
 
 ### Start of PBS Code
 cat > "${SCRIPT}" << __EOF__
